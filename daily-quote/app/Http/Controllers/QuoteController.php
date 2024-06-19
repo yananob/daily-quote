@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class QuoteController extends Controller
 {
+    private const _validation = [
+        'message' => 'required|max:500',
+        'author' => 'required|max:100',
+        'source' => 'required|max:100',
+        'source_link' => 'required|max:200',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,8 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        //
+        $quotes = Quote::all();
+        return view('quotes.index', ['quotes' => $quotes]);
     }
 
     /**
@@ -24,7 +32,7 @@ class QuoteController extends Controller
      */
     public function create()
     {
-        //
+        return view('quotes.create', ['quote' => new Quote()]);
     }
 
     /**
@@ -35,7 +43,12 @@ class QuoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, self::_validation);
+        $quote = new Quote([
+            'message' => $request->message, 'author' => $request->author, 'source' => $request->source, 'source_link' => $request->source_link,
+        ]);
+        $quote->save();
+        return redirect(route('quotes.index'));
     }
 
     /**
@@ -44,10 +57,10 @@ class QuoteController extends Controller
      * @param  \App\Models\Quote  $quote
      * @return \Illuminate\Http\Response
      */
-    public function show(Quote $quote)
-    {
-        //
-    }
+    // public function show(Quote $quote)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -57,7 +70,7 @@ class QuoteController extends Controller
      */
     public function edit(Quote $quote)
     {
-        //
+        return view('quotes.index', ['quote' => $quote]);
     }
 
     /**
@@ -69,7 +82,12 @@ class QuoteController extends Controller
      */
     public function update(Request $request, Quote $quote)
     {
-        //
+        $this->validate($request, self::_validation);
+        $quote->fill([
+            'message' => $request->message, 'author' => $request->author, 'source' => $request->source, 'source_link' => $request->source_link,
+        ]);
+        $quote->save();
+        return redirect(route('quotes.index'));
     }
 
     /**
@@ -80,6 +98,7 @@ class QuoteController extends Controller
      */
     public function destroy(Quote $quote)
     {
-        //
+        $quote->delete();
+        return redirect(route('quotes.index'));
     }
 }
