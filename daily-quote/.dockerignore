@@ -1,0 +1,10 @@
+.dockerignore
+.env.example
+.gitattributes
+.gitignore
+docker-compose.yml
+Dockerfile
+phpunit.xml
+README.md
+/_deploy
+/tests

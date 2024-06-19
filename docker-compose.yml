@@ -1,0 +1,13 @@
+services:
+  web:
+    image: daily-quote
+    # container_name: 
+    build: 
+      context: ./daily-quote
+      dockerfile: ./Dockerfile
+    command: php artisan serve --host 0.0.0.0 --port 8080
+    volumes:
+      - ./myapp:/daily-quote
+    ports:
+      - "8080:8080"
+    restart: always
