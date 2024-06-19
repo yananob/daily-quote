@@ -2,16 +2,19 @@
 
 @section("content")
 @include('commons.errors')
-<form action="{{ route('quotes.update', $quote) }}" method="post">
+
+<form name="edit_form" action="{{ route('quotes.update', $quote) }}" method="post">
+    @csrf
     @method("patch")
     @include("quotes.form")
-    <button type="submit">Update</button>
-    <a href="{{ route('quotes.index') }}">Back</a>
 </form>
-<br>
-<form action="{{ route('quotes.destroy', $quote) }}" method="post">
+
+<button type="submit" class="btn btn-primary" onclick="document.edit_form.submit()">Update</button>
+<button type="button" class="btn btn-warning" onclick="backToIndex()">Back</button>
+<button type="button" class="btn btn-danger" onclick="document.delete_form.submit()">Delete</button>
+
+<form name="delete_form" action="{{ route('quotes.destroy', $quote) }}" method="post">
     @csrf
     @method("delete")
-    <button type="submit">Delete</button>
 </form>
 @endsection

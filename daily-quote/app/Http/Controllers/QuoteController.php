@@ -70,7 +70,7 @@ class QuoteController extends Controller
      */
     public function edit(Quote $quote)
     {
-        return view('quotes.index', ['quote' => $quote]);
+        return view('quotes.edit', ['quote' => $quote]);
     }
 
     /**

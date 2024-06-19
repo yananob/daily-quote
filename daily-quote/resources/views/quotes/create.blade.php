@@ -4,7 +4,7 @@
 @include('commons.errors')
 <form action="{{ route('quotes.store') }}" method="post">
     @include("quotes.form")
-    <button type="submit">Store</button>
-    <a href="{{ route('quotes.index') }}">Back</a>
+    <button type="submit" class="btn btn-primary">Store</button>
+    <button type="button" class="btn btn-warning" onclick="backToIndex()">Back</button>
 </form>
 @endsection

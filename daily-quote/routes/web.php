@@ -24,4 +24,4 @@ Route::get('/quotes/create', [QuoteController::class, 'create'])->name('quotes.c
 Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
 Route::get('/quotes/{quote}/edit', [QuoteController::class, 'edit'])->name('quotes.edit');
 Route::patch('/quotes/{quote}', [QuoteController::class, 'update'])->name('quotes.update');
-Route::delete('/quotes/{quote}', [QuoteController::class, 'destory'])->name('quotes.destory');
+Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
