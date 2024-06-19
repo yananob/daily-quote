@@ -26,7 +26,7 @@
                 </tbody>
             </table>
         </div>
-        $quotes->appends(Request::all())->links()
+        {{ $quotes->appends(Request::all())->links() }}
     </div>
 </div>
 @endsection

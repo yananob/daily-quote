@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class QuoteController extends Controller
 {
+    const COUNT_PER_PAGE = 20;
+
     private const _validation = [
         'message' => 'required|max:500',
         'author' => 'required|max:100',
@@ -21,7 +23,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        $quotes = Quote::all();
+        $quotes = Quote::paginate(self::COUNT_PER_PAGE);
         return view('quotes.index', ['quotes' => $quotes]);
     }
 
