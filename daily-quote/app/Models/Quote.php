@@ -9,5 +9,5 @@ class Quote extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message', 'author', 'source', 'source_link'];
+    protected $fillable = ['id', 'message', 'author', 'source', 'source_link'];
 }
