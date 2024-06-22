@@ -1,15 +1,17 @@
 <?php declare(strict_types=1);
 
-use MyApp\Quotes;
+// use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+use App\Models\Quote;
 
-final class QuotesTest extends PHPUnit\Framework\TestCase
+final class QuotesTest extends TestCase
 {
     private $quotes;
     private array $check_fields = ["no", "message", "author", "source", "source_link"];
 
     protected function setUp(): void
     {
-        $this->quotes = new Quotes($collection_name="daily-quotes-test");
+        $this->quotes = new Quote();
     }
 
     private function __filterCheckFields(array $input): array
