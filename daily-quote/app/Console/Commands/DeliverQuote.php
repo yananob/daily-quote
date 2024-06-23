@@ -7,6 +7,8 @@ use Illuminate\Console\Command;
 
 class DeliverQuote extends Command
 {
+    private const TARGET = 'nobu';
+
     /**
      * The name and signature of the console command.
      *
@@ -38,12 +40,8 @@ class DeliverQuote extends Command
      */
     public function handle()
     {
-        var_dump("HELLO!");
-        $quote = Quote::inRandomOrder()->first();
-        var_dump($quote);
-        var_dump($quote->message);
         $line = new \yananob\mytools\Line(base_path('config/line.json'));
-        $line->sendMessage('nobu', 'HELLO!');
+        $line->sendMessage(self::TARGET, Quote::randomMessage());
 
         return 0;
     }

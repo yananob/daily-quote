@@ -4,18 +4,18 @@
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Quote;
-use Database\Seeders\QuoteSeeder;
+use Database\Seeders\QuoteTestSeeder;
 
 final class QuotesTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $quotes;
-    private array $check_fields = ["no", "message", "author", "source", "source_link"];
-    protected string $seeder = QuoteSeeder::class;
+    // private array $check_fields = ["no", "message", "author", "source", "source_link"];
+    protected string $seeder = QuoteTestSeeder::class;
 
     // protected function setUp(): void
     // {
+    //     parent::setUp();
     //     $this->quotes = new Quote();
     // }
 
@@ -32,19 +32,13 @@ final class QuotesTest extends TestCase
 
     // public function testGet(): void
     // {
-    //     $index = 1;
-    //     $quote = $this->quotes->get($index);
-
-    //     $this->assertEquals(
-    //         [
-    //             "no" => $index,
-    //             "message" => "設計とプログラミングをやるんは人間やで。それを忘れたらあかん。忘れたら、何もかも無くしてまうで。",
-    //             "author" => "Bjarne Stroustrup",
-    //             "source" => "XPエピソード　関西弁バージョン",
-    //             "source_link" => "http://agileware.jp/articles/xp/xpepisode-kansai.html",
-    //         ],
-    //         $this->__filterCheckFields($quote)
-    //     );
+    //     $this->assertDatabaseHas('quotes', [
+    //         "id" => 2,
+    //         "message" => "設計とプログラミングをやるんは人間やで。それを忘れたらあかん。忘れたら、何もかも無くしてまうで。",
+    //         "author" => "Bjarne Stroustrup",
+    //         "source" => "XPエピソード　関西弁バージョン",
+    //         "source_link" => "http://agileware.jp/articles/xp/xpepisode-kansai.html",
+    //     ]);
     // }
 
     // public function testGetRandom(): void
@@ -136,13 +130,9 @@ final class QuotesTest extends TestCase
     //     $this->assertSame($count - 1, $this->quotes->count());
     // }
 
-    public function testDummy(): void
+    public function testRandomMessage(): void 
     {
-        $quote = new Quote();
-        $quote = Quote::inRandomOrder()->first();
-        // dd($quote);
-        $this->assertNotNull($quote);
-        var_dump($quote);
-        $this->assertEquals([], [$quote->message]);
+        $message = Quote::randomMessage();
+        $this->assertNotEmpty($message);
     }
 }

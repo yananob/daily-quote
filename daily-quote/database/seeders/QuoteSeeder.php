@@ -8,6 +8,8 @@ use Illuminate\Database\Seeder;
 
 class QuoteSeeder extends Seeder
 {
+    protected const CSV_FILE = '2024-06-22-dailyquotes.csv';
+
     /**
      * Run the database seeds.
      *
@@ -15,7 +17,7 @@ class QuoteSeeder extends Seeder
      */
     public function run()
     {
-        $fp = fopen(database_path('/seeders/data/2024-06-22-dailyquotes.csv'), 'r');
+        $fp = fopen(database_path('/seeders/data/' . self::CSV_FILE), 'r');
         // if ($fp === false) {
         //     throw new Exception("cannot open file");
         // }
