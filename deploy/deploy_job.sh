@@ -3,7 +3,7 @@ set -eu
 
 source ../common.sh
 
-JOB_NAME="daily-quote-job"
+JOB_NAME="daily-quote-timer"
 
 gcloud run jobs deploy ${JOB_NAME} \
   --image us-west1-docker.pkg.dev/${PROJECT_ID}/daily-quote/main:latest \
@@ -13,8 +13,8 @@ gcloud run jobs deploy ${JOB_NAME} \
   --task-timeout=10
 
 # MEMO: cron: Minute Hour Day Month Weekday(0-6)
-# ＊updateにしてるので、初回登録時は要変更？
-gcloud scheduler jobs update http ${JOB_NAME}-scheduler-trigger \
+# ＊updateにしてるので、初回登録時は要変更
+gcloud scheduler jobs update http ${JOB_NAME} \
   --location ${REGION} \
   --schedule="10 7 * * *" \
   --time-zone=Asia/Tokyo \
