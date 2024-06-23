@@ -3,19 +3,20 @@ set -eu
 
 source ../../common.sh
 
-JOB_NAME="daily-quote-products-job"
+JOB_NAME="daily-quote-job"
 
 gcloud run jobs deploy ${JOB_NAME} \
-  --image us-west1-docker.pkg.dev/${PROJECT_ID}/daily-quote/products:latest \
+  --image us-west1-docker.pkg.dev/${PROJECT_ID}/daily-quote/main:latest \
   --command=php \
-  --args=artisan,migrate:status \
-  --max-retries=1 \
-  --task-timeout=1
+  --args=artisan,command:deliver-quote \
+  --max-retries=3 \
+  --task-timeout=10
 
+# MEMO: cron: Minute Hour Day Month Weekday(0-6)
 # ＊updateにしてるので、初回登録時は要変更？
 gcloud scheduler jobs update http ${JOB_NAME}-scheduler-trigger \
   --location ${REGION} \
-  --schedule="0 0 1 1 1" \
+  --schedule="10 7 * * *" \
   --time-zone=Asia/Tokyo \
   --uri="https://${REGION}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${PROJECT_ID}/jobs/${JOB_NAME}:run" \
   --http-method POST \
