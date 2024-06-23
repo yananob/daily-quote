@@ -3,12 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Quote;
-use Exception;
 use Illuminate\Database\Seeder;
 
 class QuoteSeeder extends Seeder
 {
-    protected const CSV_FILE = '2024-06-22-dailyquotes.csv';
+    protected const CSV_FILE = '2024-06-22_daily-quotes_quotes_quotes.csv';
 
     /**
      * Run the database seeds.
