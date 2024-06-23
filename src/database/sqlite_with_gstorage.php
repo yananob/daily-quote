@@ -11,6 +11,9 @@ final class SQLiteWithGStorage
     {
         // memo: まだLaravelが立ち上がってないためか、envでは環境変数が取れない
         // （コンテナじゃない場合もエラーが出ないが、この場合はgcloud configの情報を取ってそう）
+        $client = new StorageClient([
+            'keyFile' => json_decode(file_get_contents(config_path('gcp_serviceaccount.json')), true)
+        ]);
         $client = new StorageClient();
         $bucket = $client->bucket(self::BUCKET_NAME);
         $object = $bucket->object(self::FILENAME);

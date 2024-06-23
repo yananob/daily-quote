@@ -3,11 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\Quote;
-use Exception;
 use Illuminate\Database\Seeder;
 
 class QuoteSeeder extends Seeder
 {
+    protected const CSV_FILE = '2024-06-22_daily-quotes_quotes_quotes.csv';
+
     /**
      * Run the database seeds.
      *
@@ -15,7 +16,7 @@ class QuoteSeeder extends Seeder
      */
     public function run()
     {
-        $fp = fopen(database_path('/seeders/data/2024-06-14_daily-quotes_quotes_quotes.csv'), 'r');
+        $fp = fopen(database_path('/seeders/data/' . self::CSV_FILE), 'r');
         // if ($fp === false) {
         //     throw new Exception("cannot open file");
         // }
@@ -26,13 +27,13 @@ class QuoteSeeder extends Seeder
                     continue;
                 }
 
-                var_dump($line);
+                // var_dump($line);
                 Quote::create([
                     "id" => (int)$line[0] + 1,
-                    "message" => $line[5],
+                    "message" => $line[1],
                     "author" => $line[2],
-                    "source" => $line[4],
-                    "source_link" => $line[6],
+                    "source" => $line[3],
+                    "source_link" => $line[4],
                 ]);
             }
         }

@@ -23,7 +23,7 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 | DB restore / store
 */
 
-// require_once __DIR__.'/database/sqlite_with_gstorage.php';
+// require_once __DIR__ . '/database/sqlite_with_gstorage.php';
 
 // // Initialize SQLite database from Google Storage
 // print("Initializing database\n");
