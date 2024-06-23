@@ -23,21 +23,21 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 | DB restore / store
 */
 
-require_once __DIR__ . '/database/sqlite_with_gstorage.php';
+// require_once __DIR__ . '/database/sqlite_with_gstorage.php';
 
-// Initialize SQLite database from Google Storage
-print("Initializing database\n");
-SQLiteWithGStorage::initialize();
-print("Database initialized.\n");
+// // Initialize SQLite database from Google Storage
+// print("Initializing database\n");
+// SQLiteWithGStorage::initialize();
+// print("Database initialized.\n");
 
-// Register SIGTERM process to save SQLite database to Google Storage
-pcntl_async_signals(true);
-pcntl_signal(SIGTERM, function () {
-    print("Received SIGTERM\n");
-    print("Storing database\n");
-    SQLiteWithGStorage::store();
-    print("Database stored.\n");
-});
+// // Register SIGTERM process to save SQLite database to Google Storage
+// pcntl_async_signals(true);
+// pcntl_signal(SIGTERM, function () {
+//     print("Received SIGTERM\n");
+//     print("Storing database\n");
+//     SQLiteWithGStorage::store();
+//     print("Database stored.\n");
+// });
 
 /*
 |--------------------------------------------------------------------------

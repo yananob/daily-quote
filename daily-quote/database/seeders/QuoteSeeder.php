@@ -26,7 +26,7 @@ class QuoteSeeder extends Seeder
                     continue;
                 }
 
-                var_dump($line);
+                // var_dump($line);
                 Quote::create([
                     "id" => (int)$line[0] + 1,
                     "message" => $line[1],
