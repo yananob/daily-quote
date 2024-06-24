@@ -4,17 +4,16 @@ namespace App\Console\Commands;
 
 use App\Models\Quote;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class DeliverQuote extends Command
 {
-    private const TARGET = 'nobu';
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:deliver-quote';
+    protected $signature = 'command:deliver-quote {target}';
 
     /**
      * The console command description.
@@ -40,8 +39,10 @@ class DeliverQuote extends Command
      */
     public function handle()
     {
+        $target = $this->argument('target');
+        Log::info("Sending daily-quote to {$target}");
         $line = new \yananob\mytools\Line(base_path('config/line.json'));
-        $line->sendMessage(self::TARGET, Quote::randomMessage());
+        $line->sendMessage($target, Quote::randomMessage());
 
         return 0;
     }
