@@ -46,7 +46,7 @@ class DeliverQuote extends Command
         if (empty($target)) {
             throw new Exception('Please specity MYAPP_DELIVER_TARGET.');
         }
-        Log::info("Sending daily-quote to {$target}");
+        print("Sending daily-quote to {$target}\n");
         $line = new \yananob\mytools\Line(base_path('config/line.json'));
         $line->sendMessage($target, Quote::randomMessage());
 
