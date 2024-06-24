@@ -3,8 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Models\Quote;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+
+use function PHPUnit\Framework\assertNotNull;
 
 class DeliverQuote extends Command
 {
@@ -13,7 +16,7 @@ class DeliverQuote extends Command
      *
      * @var string
      */
-    protected $signature = 'command:deliver-quote {target}';
+    protected $signature = 'command:deliver-quote';
 
     /**
      * The console command description.
@@ -39,7 +42,10 @@ class DeliverQuote extends Command
      */
     public function handle()
     {
-        $target = $this->argument('target');
+        $target = env('MYAPP_DELIVER_TARGET');
+        if (empty($target)) {
+            throw new Exception('Please specity MYAPP_DELIVER_TARGET.');
+        }
         Log::info("Sending daily-quote to {$target}");
         $line = new \yananob\mytools\Line(base_path('config/line.json'));
         $line->sendMessage($target, Quote::randomMessage());
