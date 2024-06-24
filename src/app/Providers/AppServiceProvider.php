@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         \Illuminate\Pagination\Paginator::useBootstrap();
 
+        $this->__registerStoreDatabaseFunction();
         $this->__retrieveDatabase();
     }
 
@@ -47,6 +48,30 @@ class AppServiceProvider extends ServiceProvider
         $bucket = $client->bucket($bucketName);
         $object = $bucket->object($dbFilename);
         $object->downloadToFile(database_path($dbFilename));
-        print("Retrieved database.\n");
+        print("Database retrieved.\n");
+    }
+
+    private function __registerStoreDatabaseFunction(): void
+    {
+        pcntl_async_signals(true);
+        pcntl_signal(SIGTERM, function () {
+            print("Received SIGTERM\n");
+            print("Storing database\n");
+            $this->__storeDatabase();
+            print("Database stored.\n");
+            exit;
+        });
+        printf("Registered event.\n");
+    }
+
+    private function __storeDatabase(): void
+    {
+        $client = new StorageClient([
+            'keyFile' => json_decode(file_get_contents(config_path('gcp_serviceaccount.json')), true)
+        ]);
+        $bucket = $client->bucket(env('MYAPP_CLOUD_BUCKET_NAME'));
+        $bucket->upload(
+            fopen(database_path(env('MYAPP_SQLITE_FILENAME')), 'r')
+        );
     }
 }
