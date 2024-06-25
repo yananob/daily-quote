@@ -12,4 +12,5 @@ WORKDIR /myapp
 
 ENV GOOGLE_APPLICATION_CREDENTIALS /myapp/config/gcp_serviceaccount.json
 
-CMD [ "php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8080" ]
+# CMD [ "php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8080" ]
+CMD ["command/serve.sh", "production"]

@@ -5,9 +5,10 @@ services:
     build: 
       context: ./src
       dockerfile: ./Dockerfile
-    command: php artisan serve --host 0.0.0.0 --port 8080 --env=local
+    # command: php artisan serve --host 0.0.0.0 --port 8080 --env=local
+    command: command/serve.sh local
     volumes:
-      - ./myapp:/src
+      - ./src:/myapp
     ports:
       - "8080:8080"
     restart: always
