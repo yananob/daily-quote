@@ -1,9 +1,10 @@
 .dockerignore
 .env.example
-.env.testing
 .gitattributes
 .gitignore
 Dockerfile
 phpunit.xml
 README.md
 /tests
+
+database.sqlite*

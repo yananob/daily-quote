@@ -2,7 +2,8 @@
 set -eu
 
 if [ $# -ne 1 ]; then
-    echo "$0 [env: local/production]"
+    echo "Insufficient parameters."
+    echo "  $0 [env: local/production]"
     exit 1
 fi
 

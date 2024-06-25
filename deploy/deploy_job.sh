@@ -9,7 +9,7 @@ echo "Deploying job to region: ${REGION}, project: ${PROJECT_ID}"
 gcloud run jobs deploy ${JOB_NAME} \
   --image us-west1-docker.pkg.dev/${PROJECT_ID}/daily-quote/main:latest \
   --command=php \
-  --args=artisan,command:deliver-quote,stnb \
+  --args=artisan,command:deliver-quote \
   --max-retries=3 \
   --task-timeout=10
 
