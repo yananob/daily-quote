@@ -30,22 +30,5 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') === 'production') {
             $url->forceScheme('https');
         }
-
-        // $this->__registerStoreDatabaseFunction();
-        // $this->__retrieveDatabase();
-        // // }
     }
-
-    // private function __registerStoreDatabaseFunction(): void
-    // {
-    //     pcntl_async_signals(true);
-    //     pcntl_signal(SIGTERM, function () {
-    //         print("Received SIGTERM\n");
-    //         print("Storing database\n");
-    //         $this->__storeDatabase();
-    //         print("Database stored.\n");
-    //         exit;
-    //     });
-    //     printf("Registered event.\n");
-    // }
 }
