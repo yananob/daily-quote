@@ -6,11 +6,10 @@ RUN apt-get update \
 RUN docker-php-ext-configure pcntl --enable-pcntl \
   && docker-php-ext-install pcntl
 
+COPY ./vendor /myapp/vendor
 COPY . /myapp
-
 WORKDIR /myapp
 
 ENV GOOGLE_APPLICATION_CREDENTIALS /myapp/config/gcp_serviceaccount.json
 
-# CMD [ "php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8080" ]
 CMD ["command/serve.sh", "production"]

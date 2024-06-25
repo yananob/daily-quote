@@ -5,6 +5,6 @@
 Dockerfile
 phpunit.xml
 README.md
-/tests
-
-database.sqlite*
+tests
+database/database.sqlite*
+database/seeders/data
