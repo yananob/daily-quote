@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-source ../common.sh
+source ./common.sh
 
 echo "Deploying to region: ${REGION}, project: ${PROJECT_ID}"
 

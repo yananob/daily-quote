@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-source ../common.sh
+source ./common.sh
 
 JOB_NAME="daily-quote-timer"
 
