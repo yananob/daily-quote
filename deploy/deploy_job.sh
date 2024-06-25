@@ -8,8 +8,8 @@ JOB_NAME="daily-quote-timer"
 echo "Deploying job to region: ${REGION}, project: ${PROJECT_ID}"
 gcloud run jobs deploy ${JOB_NAME} \
   --image us-west1-docker.pkg.dev/${PROJECT_ID}/daily-quote/main:latest \
-  --command=php \
-  --args=artisan,command:deliver-quote,stnb \
+  --command=sh \
+  --args=command/launch_cmd.sh,production,deliver-quote \
   --max-retries=3 \
   --task-timeout=10
 

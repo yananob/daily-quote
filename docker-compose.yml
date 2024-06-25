@@ -1,17 +1,12 @@
 services:
   web:
     image: daily-quote
-    # container_name: 
     build: 
       context: ./src
       dockerfile: ./Dockerfile
-    command: php artisan serve --host 0.0.0.0 --port 8080 --env=local
-    volumes:
-      - ./myapp:/src
+    command: command/serve.sh local
+    # volumes:
+    #   - ./src:/myapp
     ports:
       - "8080:8080"
     restart: always
-    # env_file:
-    #   - src/.env.local
-    # environment:
-    #   - GOOGLE_APPLICATION_CREDENTIALS=/myapp/config/gcp_serviceaccount.json

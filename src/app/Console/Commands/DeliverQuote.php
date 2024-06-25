@@ -3,11 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Quote;
-use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-
-use function PHPUnit\Framework\assertNotNull;
 
 class DeliverQuote extends Command
 {
@@ -44,7 +40,7 @@ class DeliverQuote extends Command
     {
         $target = env('MYAPP_DELIVER_TARGET');
         if (empty($target)) {
-            throw new Exception('Please specity MYAPP_DELIVER_TARGET.');
+            throw new \Exception('Please specity MYAPP_DELIVER_TARGET.');
         }
         print("Sending daily-quote to {$target}\n");
         $line = new \yananob\mytools\Line(base_path('config/line.json'));
