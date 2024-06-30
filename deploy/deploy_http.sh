@@ -12,6 +12,6 @@ docker tag daily-quote:latest ${REGION}-docker.pkg.dev/${PROJECT_ID}/daily-quote
 
 docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/daily-quote/main
 
-gcloud run deploy daily-quote-container --image us-west1-docker.pkg.dev/nobu5-393106/daily-quote/main:latest
+gcloud run deploy daily-quote --image us-west1-docker.pkg.dev/nobu5-393106/daily-quote/main:latest
 
 popd
