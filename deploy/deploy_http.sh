@@ -3,8 +3,8 @@ set -eu
 
 source ./common.sh
 
-echo "Launching Docker Desktop"
-"/mnt/c/Program Files/Docker/Docker/Docker Desktop.exe"
+# echo "Launching Docker Desktop"
+# "/mnt/c/Program Files/Docker/Docker/Docker Desktop.exe"
 
 echo "Deploying to region: ${REGION}, project: ${PROJECT_ID}"
 
