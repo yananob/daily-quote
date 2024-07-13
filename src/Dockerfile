@@ -6,7 +6,7 @@ RUN apt-get update \
 RUN docker-php-ext-configure pcntl --enable-pcntl \
   && docker-php-ext-install pcntl
 
-COPY ./vendor /myapp/vendor
+# COPY ./vendor /myapp/vendor
 COPY . /myapp
 WORKDIR /myapp
 
