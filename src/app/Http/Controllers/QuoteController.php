@@ -13,7 +13,7 @@ class QuoteController extends Controller
         'message' => 'required|max:500',
         'author' => 'required|max:100',
         'source' => 'required|max:100',
-        'source_link' => 'required|max:200',
+        'source_link' => 'max:200',
     ];
 
     /**
