@@ -17,8 +17,8 @@ class CreateQuotesTable extends Migration
             $table->id();
             $table->string('message');
             $table->string('author');
-            $table->string('source');
-            $table->string('source_link');
+            $table->string('source')->nullable();
+            $table->string('source_link')->nullable();
             $table->timestamps();
         });
     }

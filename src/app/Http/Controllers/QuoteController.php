@@ -12,8 +12,8 @@ class QuoteController extends Controller
     private const _validation = [
         'message' => 'required|max:500',
         'author' => 'required|max:100',
-        'source' => 'required|max:100',
-        'source_link' => 'max:200',
+        'source' => 'nullable|max:100',
+        'source_link' => 'nullable|max:200',
     ];
 
     /**
