@@ -10,8 +10,12 @@ echo "Deploying to region: ${REGION}, project: ${PROJECT_ID}"
 
 pushd ..
 
-docker-compose build
+docker compose build
 docker tag daily-quote:latest ${REGION}-docker.pkg.dev/${PROJECT_ID}/daily-quote/main
+
+# Need authorization to Artifact Repository
+# https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images?hl=ja
+# $ gcloud auth configure-docker us-west1-docker.pkg.dev
 
 docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/daily-quote/main
 
