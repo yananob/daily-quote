@@ -14,7 +14,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "yananob/mytools": "dev-main"
+        "yananob/my-tools": "dev-main"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -27,7 +27,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:yananob/mytools.git"
+            "url": "git@github.com:yananob/my-tools.git"
         }
     ],
     "autoload": {
