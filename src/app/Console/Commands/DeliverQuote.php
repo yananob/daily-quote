@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Quote;
 use Illuminate\Console\Command;
+use yananob\MyTools\Line;
 
 class DeliverQuote extends Command
 {
@@ -43,8 +44,12 @@ class DeliverQuote extends Command
             throw new \Exception('Please specity MYAPP_DELIVER_TARGET.');
         }
         print("Sending daily-quote to {$target}\n");
-        $line = new \yananob\MyTools\Line(base_path('config/line.json'));
-        $line->sendMessage($target, Quote::randomMessage());
+        $line = new Line(base_path('config/line.json'));
+        $line->sendPush(
+            bot: $target,
+            target: $target,
+            message: Quote::randomMessage(),
+        );
 
         return 0;
     }
