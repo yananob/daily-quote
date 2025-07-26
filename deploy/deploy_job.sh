@@ -18,7 +18,7 @@ echo "Updating job scheduler"
 # ＊updateにしてるので、初回登録時は要変更
 gcloud scheduler jobs update http ${JOB_NAME} \
   --location ${REGION} \
-  --schedule="10 7 * * *" \
+  --schedule="0 8 * * *" \
   --time-zone=Asia/Tokyo \
   --uri="https://${REGION}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${PROJECT_ID}/jobs/${JOB_NAME}:run" \
   --http-method POST \

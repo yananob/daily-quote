@@ -21,10 +21,19 @@ class QuoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $quotes = Quote::paginate(self::COUNT_PER_PAGE);
-        return view('quotes.index', ['quotes' => $quotes]);
+        $keyword = $request->input('keyword');
+
+        $query = Quote::query();
+
+        if (!empty($keyword)) {
+            $query->where('message', 'LIKE', "%{$keyword}%");
+        }
+
+        $quotes = $query->orderBy('id', 'desc')->paginate(10);
+
+        return view('quotes.index', compact('quotes', 'keyword'));
     }
 
     /**
