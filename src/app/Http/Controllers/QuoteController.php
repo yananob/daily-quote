@@ -31,7 +31,7 @@ class QuoteController extends Controller
             $query->where('message', 'LIKE', "%{$keyword}%");
         }
 
-        $quotes = $query->orderBy('id', 'desc')->paginate(10);
+        $quotes = $query->orderBy('id', 'asc')->paginate(10);
 
         return view('quotes.index', compact('quotes', 'keyword'));
     }
