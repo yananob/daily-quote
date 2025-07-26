@@ -3,6 +3,14 @@
 @section("content")
 <div class="row">
     <div class="col">
+        <form action="{{ route('quotes.index') }}" method="GET" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="keyword" class="form-control" placeholder="Search by message..." value="{{ $keyword ?? '' }}">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
         <div class="table-responsive">
             <form action="{{ route('quotes.create') }}">
                 <button type="submit" class="btn btn-sm btn-primary">Add</button>
