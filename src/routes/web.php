@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuoteController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,14 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/', [QuoteController::class, 'index'])->name('quotes.index');
-Route::get('/quotes', [QuoteController::class, 'index']);
-Route::get('/quotes/create', [QuoteController::class, 'create'])->name('quotes.create');
-Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
-Route::get('/quotes/{quote}/edit', [QuoteController::class, 'edit'])->name('quotes.edit');
-Route::patch('/quotes/{quote}', [QuoteController::class, 'update'])->name('quotes.update');
-Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
+Route::middleware(['password.protect'])->group(function () {
+    Route::get('/', [QuoteController::class, 'index'])->name('quotes.index');
+    Route::get('/quotes', [QuoteController::class, 'index']);
+    Route::get('/quotes/create', [QuoteController::class, 'create'])->name('quotes.create');
+    Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
+    Route::get('/quotes/{quote}/edit', [QuoteController::class, 'edit'])->name('quotes.edit');
+    Route::patch('/quotes/{quote}', [QuoteController::class, 'update'])->name('quotes.update');
+    Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
+});
