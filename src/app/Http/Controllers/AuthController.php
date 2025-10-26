@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -28,7 +29,8 @@ class AuthController extends Controller
         $password = $request->input('password');
 
         if ($password === config('auth.password')) {
-            $cookie = cookie('auth_token', csrf_token(), 60 * 24 * 90); // 90 days
+            $token = Str::random(60);
+            $cookie = cookie('auth_token', $token, 60 * 24 * 90); // 90 days
             return redirect()->route('quotes.index')->withCookie($cookie);
         }
 
