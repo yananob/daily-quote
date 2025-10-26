@@ -1,0 +1,11 @@
+# Use the official PHP image for Google Cloud Functions
+FROM gcr.io/php-runtimes/php
+
+# Set the working directory
+WORKDIR /workspace
+
+# Copy the application code
+COPY . .
+
+# Install dependencies
+RUN composer install --no-dev --no-interaction --no-progress --no-scripts
