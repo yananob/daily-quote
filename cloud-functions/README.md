@@ -1,26 +1,26 @@
-# Deliver Quote Cloud Function
+# 格言配信Cloud Function
 
-This Cloud Function fetches a random quote from Firestore and sends it to a specified LINE user or group.
+このCloud Functionは、Firestoreからランダムに格言を取得し、指定されたLINEユーザーまたはグループに送信します。
 
-## Setup
+## セットアップ
 
-1.  **Install Dependencies:**
+1.  **依存関係のインストール:**
     ```bash
     composer install
     ```
 
-2.  **Set Environment Variables:**
-    Create a `.env.yaml` file in this directory with the following content:
+2.  **環境変数の設定:**
+    このディレクトリに`.env.yaml`ファイルを作成し、以下の内容を記述します。
     ```yaml
     LINE_BOT_CHANNEL_ACCESS_TOKEN: "your_line_bot_channel_access_token"
     LINE_BOT_CHANNEL_SECRET: "your_line_bot_channel_secret"
     MYAPP_DELIVER_TARGET: "your_line_user_or_group_id"
     ```
-    Replace the placeholder values with your actual LINE Bot credentials and the target ID.
+    プレースホルダーの値を、実際のLINE Botの認証情報とターゲットIDに置き換えてください。
 
-## Deployment
+## デプロイ
 
-Deploy the function to Google Cloud Functions using the `gcloud` command-line tool:
+`gcloud`コマンドラインツールを使用して、このファンクションをGoogle Cloud Functionsにデプロイします。
 
 ```bash
 gcloud functions deploy deliverQuote \\
@@ -29,4 +29,4 @@ gcloud functions deploy deliverQuote \\
   --entry-point deliverQuote \\
   --env-vars-file .env.yaml
 ```
-This command deploys the `deliverQuote` function, setting it to trigger on messages published to the `daily-quote-trigger` Pub/Sub topic. The required environment variables are loaded from the `.env.yaml` file.
+このコマンドは`deliverQuote`ファンクションをデプロイし、`daily-quote-trigger`というPub/Subトピックにメッセージが発行されるたびにトリガーされるように設定します。必要な環境変数は`.env.yaml`ファイルから読み込まれます。

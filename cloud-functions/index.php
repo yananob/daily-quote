@@ -14,30 +14,33 @@ use App\Quote;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 function deliverQuote(CloudEventInterface $event): void
 {
-    $log = fopen(getenv('LOGGER_OUTPUT') ?: 'php://stderr', 'wb');
-    fwrite($log, "Function deliverQuote triggered.\\n");
+    $log = new Logger('deliverQuote');
+    $log->pushHandler(new StreamHandler('php://stderr'));
+    $log->info('Function deliverQuote triggered.');
 
     $httpClient = new CurlHTTPClient(getenv('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
     $bot = new LINEBot($httpClient, ['channelSecret' => getenv('LINE_BOT_CHANNEL_SECRET')]);
 
     $target = getenv('MYAPP_DELIVER_TARGET');
     if (empty($target)) {
-        fwrite($log, "Please specify MYAPP_DELIVER_TARGET.\\n");
+        $log->error('Please specify MYAPP_DELIVER_TARGET.');
         return;
     }
 
     $quote = (new Quote())->getRandomMessage();
-    fwrite($log, "Selected quote: {$quote}\\n");
+    $log->info("Selected quote: {$quote}");
 
     $textMessageBuilder = new TextMessageBuilder($quote);
     $response = $bot->pushMessage($target, $textMessageBuilder);
 
     if ($response->isSucceeded()) {
-        fwrite($log, "Message sent successfully!\\n");
+        $log->info('Message sent successfully!');
     } else {
-        fwrite($log, "Failed to send message: " . $response->getRawBody() . "\\n");
+        $log->error('Failed to send message: ' . $response->getRawBody());
     }
 }
