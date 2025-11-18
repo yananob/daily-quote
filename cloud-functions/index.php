@@ -10,7 +10,7 @@ use CloudEvents\V1\CloudEventInterface;
 // Register the function with Functions Framework.
 FunctionsFramework::cloudEvent('deliverQuote', 'deliverQuote');
 
-use Google\Cloud\Firestore\FirestoreClient;
+use App\Quote;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
@@ -29,7 +29,7 @@ function deliverQuote(CloudEventInterface $event): void
         return;
     }
 
-    $quote = getRandomQuote();
+    $quote = (new Quote())->getRandomMessage();
     fwrite($log, "Selected quote: {$quote}\\n");
 
     $textMessageBuilder = new TextMessageBuilder($quote);
@@ -40,32 +40,4 @@ function deliverQuote(CloudEventInterface $event): void
     } else {
         fwrite($log, "Failed to send message: " . $response->getRawBody() . "\\n");
     }
-}
-
-function getRandomQuote(): string
-{
-    $firestore = new FirestoreClient();
-    $collectionReference = $firestore->collection('quotes');
-    $documents = $collectionReference->documents();
-
-    $quotes = [];
-    foreach ($documents as $document) {
-        if ($document->exists()) {
-            $quotes[] = $document->data();
-        }
-    }
-
-    if (empty($quotes)) {
-        return 'No quotes found.';
-    }
-
-    $randomQuote = $quotes[array_rand($quotes)];
-
-    return <<<EOF
-    Quote of the day:
-
-    {$randomQuote['message']}
-
-    [{$randomQuote['author']}] {$randomQuote['source']} {$randomQuote['source_link']}
-    EOF;
 }
