@@ -10,7 +10,7 @@ use CloudEvents\V1\CloudEventInterface;
 // Register the function with Functions Framework.
 FunctionsFramework::cloudEvent('deliverQuote', 'deliverQuote');
 
-use App\Quote;
+use App\QuoteList;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
@@ -32,10 +32,15 @@ function deliverQuote(CloudEventInterface $event): void
         return;
     }
 
-    $quote = (new Quote())->getRandomMessage();
-    $log->info("Selected quote: {$quote}");
+    $quote = (new QuoteList())->getRandomQuote();
+    if ($quote === null) {
+        $log->info('No quotes found.');
+        return;
+    }
+    $message = $quote->getFormattedMessage();
+    $log->info("Selected quote: {$message}");
 
-    $textMessageBuilder = new TextMessageBuilder($quote);
+    $textMessageBuilder = new TextMessageBuilder($message);
     $response = $bot->pushMessage($target, $textMessageBuilder);
 
     if ($response->isSucceeded()) {

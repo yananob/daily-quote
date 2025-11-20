@@ -2,41 +2,28 @@
 
 namespace App;
 
-use Google\Cloud\Firestore\FirestoreClient;
-
 class Quote
 {
-    private FirestoreClient $firestore;
+    private array $data;
 
-    public function __construct()
+    public function __construct(array $data)
     {
-        $this->firestore = new FirestoreClient();
+        $this->data = $data;
     }
 
-    public function getRandomMessage(): string
+    public function getFormattedMessage(): string
     {
-        $collectionReference = $this->firestore->collection('quotes');
-        $documents = $collectionReference->documents();
-
-        $quotes = [];
-        foreach ($documents as $document) {
-            if ($document->exists()) {
-                $quotes[] = $document->data();
-            }
-        }
-
-        if (empty($quotes)) {
-            return 'No quotes found.';
-        }
-
-        $randomQuote = $quotes[array_rand($quotes)];
+        $message = $this->data['message'] ?? '';
+        $author = $this->data['author'] ?? '';
+        $source = $this->data['source'] ?? '';
+        $sourceLink = $this->data['source_link'] ?? '';
 
         return <<<EOF
         Quote of the day:
 
-        {$randomQuote['message']}
+        {$message}
 
-        [{$randomQuote['author']}] {$randomQuote['source']} {$randomQuote['source_link']}
+        [{$author}] {$source} {$sourceLink}
         EOF;
     }
 }

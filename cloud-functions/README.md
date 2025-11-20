@@ -12,11 +12,13 @@
 2.  **環境変数の設定:**
     このディレクトリに`.env.yaml`ファイルを作成し、以下の内容を記述します。
     ```yaml
+    # LINE Messaging APIのチャネルアクセストークン
     LINE_BOT_CHANNEL_ACCESS_TOKEN: "your_line_bot_channel_access_token"
+    # LINE Messaging APIのチャネルシークレット
     LINE_BOT_CHANNEL_SECRET: "your_line_bot_channel_secret"
+    # LINEメッセージを送信する対象のユーザーIDまたはグループID
     MYAPP_DELIVER_TARGET: "your_line_user_or_group_id"
     ```
-    プレースホルダーの値を、実際のLINE Botの認証情報とターゲットIDに置き換えてください。
 
 ## デプロイ
 
