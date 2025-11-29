@@ -13,13 +13,14 @@ class Quote
 
     public function getFormattedMessage(): string
     {
+        $no = $this->data['no'] ?? '';
         $message = $this->data['message'] ?? '';
         $author = $this->data['author'] ?? '';
         $source = $this->data['source'] ?? '';
         $sourceLink = $this->data['source_link'] ?? '';
 
         return <<<EOF
-        Quote of the day:
+        Quote of the day #{$no}:
 
         {$message}
 

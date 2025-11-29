@@ -15,13 +15,15 @@ class QuoteList
 
     public function getRandomQuote(): ?Quote
     {
-        $collectionReference = $this->firestore->collection('quotes');
+        $collectionReference = $this->firestore->collection('daily-quotes/quotes/quotes');
         $documents = $collectionReference->documents();
 
         $quotes = [];
         foreach ($documents as $document) {
             if ($document->exists()) {
-                $quotes[] = $document->data();
+                $data = $document->data();
+                $data['no'] = $document->id();
+                $quotes[] = $data;
             }
         }
 
