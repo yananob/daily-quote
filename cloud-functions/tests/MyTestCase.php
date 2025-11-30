@@ -7,7 +7,7 @@ namespace Tests;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Dotenv\Dotenv;
 
-class TestCase extends PHPUnitTestCase
+class MyTestCase extends PHPUnitTestCase
 {
     protected function setUp(): void
     {
