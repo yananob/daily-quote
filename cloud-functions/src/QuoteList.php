@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App;
 
+use Google\Cloud\Firestore\CollectionReference;
 use Google\Cloud\Firestore\FirestoreClient;
 
 class QuoteList
 {
     private FirestoreClient $firestore;
+    private CollectionReference $rootCollection;
 
     public function __construct()
     {
         $this->firestore = new FirestoreClient();
+        $this->rootCollection = $this->firestore->collection($_ENV['FIRESTORE_ROOT_COLLECTION']);
     }
 
     public function getRandomQuote(): Quote
     {
-        $collectionReference = $this->firestore->collection('daily-quotes/quotes/quotes');
-        $documents = $collectionReference->documents();
+        $documents = $this->rootCollection->document("quotes")->collection("quotes")->documents();
 
         $quotes = [];
         foreach ($documents as $document) {
