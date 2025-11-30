@@ -18,13 +18,12 @@ function main_event(CloudEventInterface $event): void
 {
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv->load();
+    $dotenv->required(['LINE_BOT_CHANNEL_ACCESS_TOKEN', 'LINE_DELIVER_TARGET']);
 
     $log = new Logger('deliverQuote');
     $log->pushHandler(new StreamHandler('php://stderr'));
     $log->info('Function deliverQuote triggered.');
 
-    // $httpClient = new CurlHTTPClient(getenv('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
-    // $bot = new LINEBot($httpClient, ['channelSecret' => getenv('LINE_BOT_CHANNEL_SECRET')]);
     $client = new \GuzzleHttp\Client();
     $config = new \LINE\Clients\MessagingApi\Configuration();
     $config->setAccessToken(getenv('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
@@ -33,21 +32,16 @@ function main_event(CloudEventInterface $event): void
         config: $config,
     );
 
-    $target = getenv('LINE_DELIVER_TARGET');
-    if (empty($target)) {
-        throw new \RuntimeException('Environment variable MYAPP_DELIVER_TARGET is not set.');
-    }
+    $lineDeliverTarget = getenv('LINE_DELIVER_TARGET');
 
     $quote = (new QuoteList())->getRandomQuote();
 
     $message = $quote->getFormattedMessage();
     $log->info("Selected quote: {$message}");
 
-    // $textMessageBuilder = new TextMessageBuilder($message);
-    // $response = $bot->pushMessage($target, $textMessageBuilder);
     $message = new TextMessage(['text' => $message]);
     $request = new PushMessageRequest([
-        'to' => $target,
+        'to' => $lineDeliverTarget,
         'messages' => [$message],
     ]);
     $response = $messagingApi->pushMessage($request);
