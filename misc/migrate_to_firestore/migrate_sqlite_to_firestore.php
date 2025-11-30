@@ -88,7 +88,7 @@ try {
             'message' => $quote['message'],
             'author' => $quote['author'],
             'source' => $quote['source'] ?? '',
-            'sourceLink' => $quote['source_link'] ?? '',
+            'source_link' => $quote['source_link'] ?? '',
         ];
 
         // Uncomment the following block to enable Firestore writing
