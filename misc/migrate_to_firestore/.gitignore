@@ -1,3 +1,4 @@
 /vendor/
 /sqlite/
 .env
+cred.json
