@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http;
 
-use EFTEC\BladeOne\BladeOne;
+use eftec\bladeone\BladeOne;
 
 abstract class BaseController
 {
