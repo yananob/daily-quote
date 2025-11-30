@@ -6,12 +6,12 @@
         {
             "label": "run_linter",
             "type": "shell",
-            "command": "./tests/run_linter.sh"
+            "command": "./cloud-functions/tests/run_linter.sh"
         },
         {
             "label": "run_tests",
             "type": "shell",
-            "command": "./tests/run_tests.sh"
+            "command": "./cloud-functions/tests/run_tests.sh"
         },
         {
             "label": "listen_local_http",
