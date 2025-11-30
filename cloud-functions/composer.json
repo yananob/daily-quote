@@ -1,9 +1,10 @@
 {
     "require": {
         "php": "^8.0",
-        "google/cloud-firestore": "^1.35",
-        "line-bot-sdk/line-bot-sdk": "^7.6",
-        "monolog/monolog": "^3.5"
+        "monolog/monolog": "^3.5",
+        "google/cloud-functions-framework": "^1.4",
+        "google/cloud-firestore": "^1.54",
+        "linecorp/line-bot-sdk": "^12.3"
     },
     "autoload": {
         "psr-4": {
