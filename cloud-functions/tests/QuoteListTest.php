@@ -15,10 +15,6 @@ class QuoteListTest extends TestCase
         $quoteList = new QuoteList();
         $quote = $quoteList->getRandomQuote();
 
-        if ($quote !== null) {
-            $this->assertInstanceOf(Quote::class, $quote);
-        } else {
-            $this->assertNull($quote);
-        }
+        $this->assertInstanceOf(Quote::class, $quote);
     }
 }
