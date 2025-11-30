@@ -6,18 +6,19 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Google\CloudFunctions\FunctionsFramework;
 use CloudEvents\V1\CloudEventInterface;
-
-// Register the function with Functions Framework.
-FunctionsFramework::cloudEvent('deliverQuote', 'deliverQuote');
-
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use LINE\Clients\MessagingApi\Model\PushMessageRequest;
 use LINE\Clients\MessagingApi\Model\TextMessage;
+use Dotenv\Dotenv;
 use App\QuoteList;
 
+FunctionsFramework::cloudEvent('deliverQuote', 'deliverQuote');
 function deliverQuote(CloudEventInterface $event): void
 {
+    $dotenv = Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
     $log = new Logger('deliverQuote');
     $log->pushHandler(new StreamHandler('php://stderr'));
     $log->info('Function deliverQuote triggered.');
