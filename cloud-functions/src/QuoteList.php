@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Google\Cloud\Firestore\FirestoreClient;
@@ -13,7 +15,7 @@ class QuoteList
         $this->firestore = new FirestoreClient();
     }
 
-    public function getRandomQuote(): ?Quote
+    public function getRandomQuote(): Quote
     {
         $collectionReference = $this->firestore->collection('daily-quotes/quotes/quotes');
         $documents = $collectionReference->documents();
@@ -25,10 +27,6 @@ class QuoteList
                 $data['no'] = $document->id();
                 $quotes[] = $data;
             }
-        }
-
-        if (empty($quotes)) {
-            return null;
         }
 
         $randomQuote = $quotes[array_rand($quotes)];

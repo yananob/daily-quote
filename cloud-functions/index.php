@@ -10,12 +10,11 @@ use CloudEvents\V1\CloudEventInterface;
 // Register the function with Functions Framework.
 FunctionsFramework::cloudEvent('deliverQuote', 'deliverQuote');
 
-use App\QuoteList;
-use LINE\LINEBot;
-use LINE\LINEBot\HTTPClient\CurlHTTPClient;
-use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use LINE\Clients\MessagingApi\Model\PushMessageRequest;
+use LINE\Clients\MessagingApi\Model\TextMessage;
+use App\QuoteList;
 
 function deliverQuote(CloudEventInterface $event): void
 {
@@ -23,29 +22,38 @@ function deliverQuote(CloudEventInterface $event): void
     $log->pushHandler(new StreamHandler('php://stderr'));
     $log->info('Function deliverQuote triggered.');
 
-    $httpClient = new CurlHTTPClient(getenv('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
-    $bot = new LINEBot($httpClient, ['channelSecret' => getenv('LINE_BOT_CHANNEL_SECRET')]);
+    // $httpClient = new CurlHTTPClient(getenv('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
+    // $bot = new LINEBot($httpClient, ['channelSecret' => getenv('LINE_BOT_CHANNEL_SECRET')]);
+    $client = new \GuzzleHttp\Client();
+    $config = new \LINE\Clients\MessagingApi\Configuration();
+    $config->setAccessToken(getenv('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
+    $messagingApi = new \LINE\Clients\MessagingApi\Api\MessagingApiApi(
+        client: $client,
+        config: $config,
+    );
 
     $target = getenv('MYAPP_DELIVER_TARGET');
     if (empty($target)) {
-        $log->error('Please specify MYAPP_DELIVER_TARGET.');
-        return;
+        throw new \RuntimeException('Environment variable MYAPP_DELIVER_TARGET is not set.');
     }
 
     $quote = (new QuoteList())->getRandomQuote();
-    if ($quote === null) {
-        $log->info('No quotes found.');
-        return;
-    }
+
     $message = $quote->getFormattedMessage();
     $log->info("Selected quote: {$message}");
 
-    $textMessageBuilder = new TextMessageBuilder($message);
-    $response = $bot->pushMessage($target, $textMessageBuilder);
+    // $textMessageBuilder = new TextMessageBuilder($message);
+    // $response = $bot->pushMessage($target, $textMessageBuilder);
+    $message = new TextMessage(['text' => $message]);
+    $request = new PushMessageRequest([
+        'to' => $target,
+        'messages' => [$message],
+    ]);
+    $response = $messagingApi->pushMessage($request);
 
-    if ($response->isSucceeded()) {
-        $log->info('Message sent successfully!');
-    } else {
-        $log->error('Failed to send message: ' . $response->getRawBody());
-    }
+    // if ($response->isSucceeded()) {
+    $log->info('Message sent successfully!');
+    // } else {
+    //     $log->error('Failed to send message: ' . $response->getRawBody());
+    // }
 }
