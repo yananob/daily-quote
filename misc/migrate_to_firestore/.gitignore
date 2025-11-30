@@ -1,4 +1,4 @@
 /vendor/
 /sqlite/
 .env
-cred.json
+gcp-cred.json
