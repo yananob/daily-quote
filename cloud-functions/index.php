@@ -18,7 +18,7 @@ function main_event(CloudEventInterface $event): void
 {
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv->load();
-    $dotenv->required(['LINE_BOT_CHANNEL_ACCESS_TOKEN', 'LINE_DELIVER_TARGET']);
+    $dotenv->required(['LINE_BOT_CHANNEL_ACCESS_TOKEN', 'LINE_DELIVER_TARGET'])->notEmpty();
 
     $log = new Logger('deliverQuote');
     $log->pushHandler(new StreamHandler('php://stderr'));
@@ -26,13 +26,13 @@ function main_event(CloudEventInterface $event): void
 
     $client = new \GuzzleHttp\Client();
     $config = new \LINE\Clients\MessagingApi\Configuration();
-    $config->setAccessToken(getenv('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
+    $config->setAccessToken($_ENV['LINE_BOT_CHANNEL_ACCESS_TOKEN']);
     $messagingApi = new \LINE\Clients\MessagingApi\Api\MessagingApiApi(
         client: $client,
         config: $config,
     );
 
-    $lineDeliverTarget = getenv('LINE_DELIVER_TARGET');
+    $lineDeliverTarget = $_ENV['LINE_DELIVER_TARGET'];
 
     $quote = (new QuoteList())->getRandomQuote();
 
