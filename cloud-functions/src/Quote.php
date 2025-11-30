@@ -29,4 +29,14 @@ class Quote
         [{$author}] {$source} {$sourceLink}
         EOF;
     }
+
+    public function getMessage(): string
+    {
+        return $this->data['message'] ?? '';
+    }
+
+    public function getAuthor(): string
+    {
+        return $this->data['author'] ?? '';
+    }
 }

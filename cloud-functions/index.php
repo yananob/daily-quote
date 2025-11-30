@@ -12,6 +12,15 @@ use LINE\Clients\MessagingApi\Model\PushMessageRequest;
 use LINE\Clients\MessagingApi\Model\TextMessage;
 use Dotenv\Dotenv;
 use App\QuoteList;
+use Psr\Http\Message\ServerRequestInterface;
+use App\Http\QuotesController;
+
+FunctionsFramework::http('quotes', 'quotes');
+function quotes(ServerRequestInterface $request)
+{
+    $controller = new QuotesController();
+    return $controller->index($request);
+}
 
 FunctionsFramework::cloudEvent('main_event', 'main_event');
 function main_event(CloudEventInterface $event): void
