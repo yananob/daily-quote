@@ -5,18 +5,18 @@ declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Google\CloudFunctions\FunctionsFramework;
+use Psr\Http\Message\ServerRequestInterface;
 use CloudEvents\V1\CloudEventInterface;
+use Dotenv\Dotenv;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use LINE\Clients\MessagingApi\Model\PushMessageRequest;
 use LINE\Clients\MessagingApi\Model\TextMessage;
-use Dotenv\Dotenv;
 use App\QuoteList;
-use Psr\Http\Message\ServerRequestInterface;
 use App\Http\QuotesController;
 
-FunctionsFramework::http('quotes', 'quotes');
-function quotes(ServerRequestInterface $request)
+FunctionsFramework::http('main_http', 'main_http');
+function main_http(ServerRequestInterface $request)
 {
     $controller = new QuotesController();
     return $controller->index($request);
