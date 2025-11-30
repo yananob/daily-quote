@@ -13,8 +13,8 @@ use LINE\Clients\MessagingApi\Model\TextMessage;
 use Dotenv\Dotenv;
 use App\QuoteList;
 
-FunctionsFramework::cloudEvent('deliverQuote', 'deliverQuote');
-function deliverQuote(CloudEventInterface $event): void
+FunctionsFramework::cloudEvent('main_event', 'main_event');
+function main_event(CloudEventInterface $event): void
 {
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv->load();
@@ -33,7 +33,7 @@ function deliverQuote(CloudEventInterface $event): void
         config: $config,
     );
 
-    $target = getenv('MYAPP_DELIVER_TARGET');
+    $target = getenv('LINE_DELIVER_TARGET');
     if (empty($target)) {
         throw new \RuntimeException('Environment variable MYAPP_DELIVER_TARGET is not set.');
     }
