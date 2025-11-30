@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// use Google\Cloud\Firestore\FirestoreClient;
+use Google\Cloud\Firestore\FirestoreClient;
 use Dotenv\Dotenv;
 
 // =================================================================
@@ -47,11 +47,11 @@ if (!$sqliteDbPath) {
 }
 
 // --- Firestore Configuration ---
-// $firestoreProjectId = $_ENV['FIRESTORE_PROJECT_ID'] ?? null;
-// if (!$firestoreProjectId) {
-//     die("Error: FIRESTORE_PROJECT_ID is not defined in the .env file.\n");
-// }
-// $firestoreCollectionPath = 'daily-quotes/quotes/quotes';
+$firestoreProjectId = $_ENV['FIRESTORE_PROJECT_ID'] ?? null;
+if (!$firestoreProjectId) {
+    die("Error: FIRESTORE_PROJECT_ID is not defined in the .env file.\n");
+}
+$firestoreCollectionPath = 'daily-quotes-test/quotes/quotes';
 
 // =================================================================
 //  Main Script
@@ -67,12 +67,12 @@ try {
     echo "Successfully connected to SQLite database.\n";
 
     // --- Connect to Firestore ---
-    // echo "Connecting to Firestore (Project ID: {$firestoreProjectId})...\n";
-    // $firestore = new FirestoreClient([
-    //     'projectId' => $firestoreProjectId,
-    // ]);
-    // $quotesCollection = $firestore->collection($firestoreCollectionPath);
-    // echo "Successfully connected to Firestore.\n";
+    echo "Connecting to Firestore (Project ID: {$firestoreProjectId})...\n";
+    $firestore = new FirestoreClient([
+        'projectId' => $firestoreProjectId,
+    ]);
+    $quotesCollection = $firestore->collection($firestoreCollectionPath);
+    echo "Successfully connected to Firestore.\n";
 
     // --- Read from SQLite ---
     $stmt = $pdo->query('SELECT id, message, author, source, source_link FROM quotes');
@@ -92,7 +92,6 @@ try {
         ];
 
         // Uncomment the following block to enable Firestore writing
-        /*
         try {
             $quotesCollection->document($docId)->set($data);
             echo "  [{$docId}] Migrated: {$data['message']}\n";
@@ -100,15 +99,14 @@ try {
         } catch (Exception $e) {
             echo "  [ERROR][{$docId}] Failed to migrate quote: " . $e->getMessage() . "\n";
         }
-        */
 
         // This block is for demonstration purposes while Firestore is disabled
-        echo "  [DRY RUN][{$docId}] Data: " . json_encode($data) . "\n";
+        // echo "  [DRY RUN][{$docId}] Data: " . json_encode($data) . "\n";
     }
 
     echo "\nMigration process complete.\n";
-    // echo "Successfully migrated {$count} quotes to Firestore.\n";
-    echo "Processed " . count($quotes) . " quotes (Dry Run).\n";
+    echo "Successfully migrated {$count} quotes to Firestore.\n";
+    // echo "Processed " . count($quotes) . " quotes (Dry Run).\n";
 
 } catch (Exception $e) {
     die("An error occurred: " . $e->getMessage() . "\n");
