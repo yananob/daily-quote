@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use Google\Cloud\Firestore\FirestoreClient;
+use Google\Cloud\Firestore\FieldPath;
 
 class QuoteList
 {
@@ -32,5 +33,26 @@ class QuoteList
         $randomQuote = $quotes[array_rand($quotes)];
 
         return new Quote($randomQuote);
+    }
+
+    public function getQuotes(int $page = 1, int $limit = 20): array
+    {
+        $collectionReference = $this->firestore->collection('daily-quotes/quotes/quotes');
+        $query = $collectionReference
+            ->orderBy(FieldPath::documentId())
+            ->limit($limit + 1) // 1件多く取得して次のページの存在を確認
+            ->offset(($page - 1) * $limit);
+        $documents = $query->documents();
+
+        $quotes = [];
+        foreach ($documents as $document) {
+            if ($document->exists()) {
+                $data = $document->data();
+                $data['no'] = $document->id();
+                $quotes[] = new Quote($data);
+            }
+        }
+
+        return $quotes;
     }
 }
