@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 
-class QuotesController
+class QuotesController extends BaseController
 {
     private const QUOTES_PER_PAGE = 20;
 
@@ -27,11 +27,7 @@ class QuotesController
             array_pop($quotes); // remove the extra item
         }
 
-        $views = __DIR__ . '/../../views';
-        $cache = '/tmp/cache';
-        $blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
-
-        $body = $blade->run('quotes.index', [
+        $body = $this->blade->run('quotes.index', [
             'quotes' => $quotes,
             'page' => $page,
             'hasNextPage' => $hasNextPage,

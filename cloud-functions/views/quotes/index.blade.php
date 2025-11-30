@@ -3,35 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Quotes</title>
-    <style>
-        body { font-family: sans-serif; }
-        .container { width: 800px; margin: 0 auto; }
-        .quote { border-left: 3px solid #ccc; padding-left: 1em; margin-bottom: 2em; }
-        .quote p { margin: 0; }
-        .quote .author { text-align: right; }
-        .pagination { display: flex; justify-content: space-between; }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Quotes</h1>
+    <div class="container mt-4">
+        <h1 class="mb-4">Quotes</h1>
 
-        @foreach ($quotes as $quote)
-            <div class="quote">
-                <p>{{ $quote->getMessage() }}</p>
-                <p class="author">-- {{ $quote->getAuthor() }}</p>
-            </div>
-        @endforeach
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Message</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($quotes as $quote)
+                    <tr>
+                        <td>{{ $quote->getMessage() }}</td>
+                        <td>{{ $quote->getAuthor() }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-        <div class="pagination">
-            @if ($page > 1)
-                <a href="?page={{ $page - 1 }}">Previous</a>
-            @endif
-
-            @if ($hasNextPage)
-                <a href="?page={{ $page + 1 }}">Next</a>
-            @endif
-        </div>
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @if($page <= 1) disabled @endif">
+                    <a class="page-link" href="?page={{ $page - 1 }}">Previous</a>
+                </li>
+                <li class="page-item @if(!$hasNextPage) disabled @endif">
+                    <a class="page-link" href="?page={{ $page + 1 }}">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </body>
 </html>
