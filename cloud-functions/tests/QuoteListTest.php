@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
+namespace Tests;
+
 use App\QuoteList;
 use App\Quote;
 
-class QuoteListTest extends TestCase
+class QuoteListTest extends MyTestCase
 {
     public function testGetRandomQuote()
     {
