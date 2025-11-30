@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use PHPUnit\Framework\TestCase;
 use Dotenv\Dotenv;
 
-class MyTestCase extends PHPUnitTestCase
+class MyTestCase extends TestCase
 {
     protected function setUp(): void
     {
