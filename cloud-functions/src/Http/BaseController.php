@@ -13,7 +13,7 @@ abstract class BaseController
     public function __construct()
     {
         $views = __DIR__ . '/../../views';
-        $cache = '/tmp/cache';
+        $cache = './tmp/cache';
         $this->blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
     }
 }

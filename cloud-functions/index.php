@@ -15,9 +15,30 @@ use LINE\Clients\MessagingApi\Model\TextMessage;
 use App\QuoteList;
 use App\Http\QuotesController;
 
+function initialize(): void
+{
+    $environment = $_ENV['APP_ENV'] ?? 'testing';
+
+    $file_to_load = ['.env'];   // デフォルトは .env
+    if ($environment !== 'local') {
+        array_unshift($file_to_load, ".env.{$environment}");
+    }
+    $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
+    $dotenv->load();
+    $dotenv->required(['LINE_BOT_CHANNEL_ACCESS_TOKEN', 'LINE_DELIVER_TARGET'])->notEmpty();
+
+    $_ENV['APP_ENV'] = $environment;
+    var_dump($_ENV);
+}
+initialize();
+
 FunctionsFramework::http('main_http', 'main_http');
 function main_http(ServerRequestInterface $request)
 {
+    $log = new Logger('main_http');
+    $log->pushHandler(new StreamHandler('php://stderr'));
+    $log->info('Function triggered with ' . $_ENV['APP_ENV'] . ' environment.');
+
     $controller = new QuotesController();
     return $controller->index($request);
 }
@@ -25,13 +46,9 @@ function main_http(ServerRequestInterface $request)
 FunctionsFramework::cloudEvent('main_event', 'main_event');
 function main_event(CloudEventInterface $event): void
 {
-    $dotenv = Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
-    $dotenv->required(['LINE_BOT_CHANNEL_ACCESS_TOKEN', 'LINE_DELIVER_TARGET'])->notEmpty();
-
-    $log = new Logger('deliverQuote');
+    $log = new Logger('main_event');
     $log->pushHandler(new StreamHandler('php://stderr'));
-    $log->info('Function deliverQuote triggered.');
+    $log->info('Function triggered.');
 
     $client = new \GuzzleHttp\Client();
     $config = new \LINE\Clients\MessagingApi\Configuration();

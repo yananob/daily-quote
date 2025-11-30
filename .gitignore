@@ -3,3 +3,4 @@
 .env.testing
 gcp-cred.json
 .phpunit.*cache
+**/tmp/**
