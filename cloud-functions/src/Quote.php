@@ -30,13 +30,18 @@ class Quote
         EOF;
     }
 
+    public function getNo(): string
+    {
+        return $this->data['no'];
+    }
+
     public function getMessage(): string
     {
-        return $this->data['message'] ?? '';
+        return $this->data['message'];
     }
 
     public function getAuthor(): string
     {
-        return $this->data['author'] ?? '';
+        return $this->data['author'];
     }
 }

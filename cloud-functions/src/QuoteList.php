@@ -41,7 +41,7 @@ class QuoteList
     public function getQuotes(int $page = 1, int $limit = 20): array
     {
         $query = $this->quotesCollection
-            ->orderBy(FieldPath::documentId())
+            ->orderBy("no")
             ->limit($limit + 1) // 1件多く取得して次のページの存在を確認
             ->offset(($page - 1) * $limit);
         $documents = $query->documents();

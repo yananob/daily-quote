@@ -12,6 +12,7 @@
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
+                    <th>No</th>
                     <th>Message</th>
                     <th>Author</th>
                 </tr>
@@ -19,6 +20,7 @@
             <tbody>
                 @foreach ($quotes as $quote)
                     <tr>
+                        <td>{{ $quote->getNo() }}</td>
                         <td>{{ $quote->getMessage() }}</td>
                         <td>{{ $quote->getAuthor() }}</td>
                     </tr>

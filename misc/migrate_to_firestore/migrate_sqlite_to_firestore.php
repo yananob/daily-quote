@@ -102,6 +102,11 @@ try {
 
         // This block is for demonstration purposes while Firestore is disabled
         // echo "  [DRY RUN][{$docId}] Data: " . json_encode($data) . "\n";
+
+        // // for test
+        // if ((int)$quote['id'] > 50) {
+        //     break;
+        // }
     }
 
     echo "\nMigration process complete.\n";

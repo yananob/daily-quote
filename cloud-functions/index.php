@@ -28,7 +28,7 @@ function initialize(): void
     $dotenv->required(['LINE_BOT_CHANNEL_ACCESS_TOKEN', 'LINE_DELIVER_TARGET'])->notEmpty();
 
     $_ENV['APP_ENV'] = $environment;
-    var_dump($_ENV);
+    // var_dump($_ENV);
 }
 initialize();
 
