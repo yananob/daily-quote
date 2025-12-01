@@ -17,4 +17,12 @@ class QuoteListTest extends TestCase
 
         $this->assertInstanceOf(Quote::class, $quote);
     }
+
+    public function test_合計件数を取得できること()
+    {
+        $quoteList = new QuoteList();
+        $count = $quoteList->getTotalCount();
+
+        $this->assertIsInt($count);
+    }
 }
