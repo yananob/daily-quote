@@ -39,12 +39,12 @@ composer install
 
 #### Google Cloud Functions 環境
 
-Cloud Functionsにデプロイする際は、`.env.yaml`ファイルを使用して環境変数を設定します。
+Cloud Functionsにデプロイする際は、`.env`ファイルを使用して環境変数を設定します。
 
-```yaml
-# .env.yaml
-LINE_BOT_CHANNEL_ACCESS_TOKEN: "your_line_bot_channel_access_token"
-LINE_DELIVER_TARGET: "your_line_user_or_group_id"
+```
+# .env
+LINE_BOT_CHANNEL_ACCESS_TOKEN=your_line_bot_channel_access_token
+LINE_DELIVER_TARGET=your_line_user_or_group_id
 ```
 
 このファイルを`gcloud functions deploy`コマンドの`--env-vars-file`オプションで指定します。
