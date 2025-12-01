@@ -38,7 +38,7 @@ class QuoteList
         return new Quote($randomQuote);
     }
 
-    public function getQuotes(int $page = 1, int $limit = 20): array
+    public function getListInPage(int $page = 1, int $limit = 20): array
     {
         $query = $this->quotesCollection
             ->orderBy("no")
@@ -58,7 +58,7 @@ class QuoteList
         return $quotes;
     }
 
-    public function getTotalQuotesCount(): int
+    public function getTotalCount(): int
     {
         $documents = $this->quotesCollection->documents();
         return iterator_count($documents);

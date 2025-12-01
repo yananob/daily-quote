@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http;
 
-use App\QuoteList;
-use EFTEC\BladeOne\BladeOne;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
+use App\QuoteList;
 
 class QuotesController extends BaseController
 {
@@ -20,9 +19,9 @@ class QuotesController extends BaseController
         $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
 
         $quoteList = new QuoteList();
-        $quotes = $quoteList->getQuotes($page, self::QUOTES_PER_PAGE);
+        $quotes = $quoteList->getListInPage($page, self::QUOTES_PER_PAGE);
 
-        $totalQuotes = $quoteList->getTotalQuotesCount();
+        $totalQuotes = $quoteList->getTotalCount();
         $lastPage = (int)ceil($totalQuotes / self::QUOTES_PER_PAGE);
 
         $hasNextPage = count($quotes) > self::QUOTES_PER_PAGE;
