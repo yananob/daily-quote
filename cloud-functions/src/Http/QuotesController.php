@@ -22,6 +22,9 @@ class QuotesController extends BaseController
         $quoteList = new QuoteList();
         $quotes = $quoteList->getQuotes($page, self::QUOTES_PER_PAGE);
 
+        $totalQuotes = $quoteList->getTotalQuotesCount();
+        $lastPage = (int)ceil($totalQuotes / self::QUOTES_PER_PAGE);
+
         $hasNextPage = count($quotes) > self::QUOTES_PER_PAGE;
         if ($hasNextPage) {
             array_pop($quotes); // remove the extra item
@@ -31,6 +34,7 @@ class QuotesController extends BaseController
             'quotes' => $quotes,
             'page' => $page,
             'hasNextPage' => $hasNextPage,
+            'lastPage' => $lastPage,
         ]);
 
         return new Response(200, ['Content-Type' => 'text/html'], $body);

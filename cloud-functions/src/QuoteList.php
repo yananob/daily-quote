@@ -57,4 +57,10 @@ class QuoteList
 
         return $quotes;
     }
+
+    public function getTotalQuotesCount(): int
+    {
+        $documents = $this->quotesCollection->documents();
+        return iterator_count($documents);
+    }
 }
