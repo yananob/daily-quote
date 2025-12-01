@@ -63,4 +63,28 @@ class QuoteList
         $documents = $this->quotesCollection->documents();
         return iterator_count($documents);
     }
+
+    public function find(int $id): ?Quote
+    {
+        $document = $this->quotesCollection->document((string)$id)->snapshot();
+
+        if ($document->exists()) {
+            $data = $document->data();
+            $data['no'] = $document->id();
+            return new Quote($data);
+        }
+
+        return null;
+    }
+
+    public function update(int $id, array $data): void
+    {
+        $this->quotesCollection->document((string)$id)->set(
+            [
+                'author' => $data['author'],
+                'text' => $data['text'],
+            ],
+            ['merge' => true]
+        );
+    }
 }

@@ -17,6 +17,7 @@
                     <th>No</th>
                     <th>Message</th>
                     <th>Author</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,9 @@
                     <td>{{ $quote->getNo() }}</td>
                     <td>{{ $quote->getMessage() }}</td>
                     <td>{{ $quote->getAuthor() }}</td>
+                    <td>
+                        <a href="/quotes/edit/{{ $quote->getNo() }}" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
