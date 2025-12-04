@@ -17,6 +17,9 @@
                     <th>No</th>
                     <th>Message</th>
                     <th>Author</th>
+                    <th>Source</th>
+                    <th>Source Link</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +28,15 @@
                     <td>{{ $quote->getNo() }}</td>
                     <td>{{ $quote->getMessage() }}</td>
                     <td>{{ $quote->getAuthor() }}</td>
+                    <td>{{ $quote->getSource() }}</td>
+                    <td>
+                        @if ($quote->getSourceLink())
+                            <a href="{{ $quote->getSourceLink() }}" target="_blank">Link</a>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="/quotes/edit/{{ $quote->getNo() }}" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

@@ -12,16 +12,22 @@ use App\QuoteList;
 class QuotesController extends BaseController
 {
     private const QUOTES_PER_PAGE = 20;
+    private QuoteList $quoteList;
+
+    public function __construct(QuoteList $quoteList = null)
+    {
+        parent::__construct();
+        $this->quoteList = $quoteList ?? new QuoteList();
+    }
 
     public function index(ServerRequestInterface $request): ResponseInterface
     {
         $queryParams = $request->getQueryParams();
         $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
 
-        $quoteList = new QuoteList();
-        $quotes = $quoteList->getListInPage($page, self::QUOTES_PER_PAGE);
+        $quotes = $this->quoteList->getListInPage($page, self::QUOTES_PER_PAGE);
 
-        $totalQuotes = $quoteList->getTotalCount();
+        $totalQuotes = $this->quoteList->getTotalCount();
         $lastPage = (int)ceil($totalQuotes / self::QUOTES_PER_PAGE);
 
         $hasNextPage = count($quotes) > self::QUOTES_PER_PAGE;
@@ -37,5 +43,43 @@ class QuotesController extends BaseController
         ]);
 
         return new Response(200, ['Content-Type' => 'text/html'], $body);
+    }
+
+    public function edit(ServerRequestInterface $request, int $id): ResponseInterface
+    {
+        $quote = $this->quoteList->find($id);
+
+        if (!$quote) {
+            return new Response(404, [], 'Not Found');
+        }
+
+        $body = $this->blade->run('quotes.edit', [
+            'quote' => $quote,
+        ]);
+
+        return new Response(200, ['Content-Type' => 'text/html'], $body);
+    }
+
+    public function update(ServerRequestInterface $request, int $id): ResponseInterface
+    {
+        $data = $request->getParsedBody();
+
+        if (empty($data['author']) || empty($data['message'])) {
+            $quote = $this->quoteList->find($id);
+            $body = $this->blade->run('quotes.edit', [
+                'quote' => $quote,
+                'error' => 'Author and message cannot be empty.',
+            ]);
+            return new Response(400, ['Content-Type' => 'text/html'], $body);
+        }
+
+        $this->quoteList->update($id, [
+            'author' => $data['author'],
+            'message' => $data['message'],
+            'source' => $data['source'],
+            'source_link' => $data['source_link'],
+        ]);
+
+        return new Response(302, ['Location' => '/']);
     }
 }

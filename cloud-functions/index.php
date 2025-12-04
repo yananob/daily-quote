@@ -40,7 +40,24 @@ function main_http(ServerRequestInterface $request)
     $log->info('Function triggered with ' . $_ENV['APP_ENV'] . ' environment.');
 
     $controller = new QuotesController();
-    return $controller->index($request);
+
+    $path = $request->getUri()->getPath();
+    $method = $request->getMethod();
+
+    $log->info("{$method} {$path}");
+
+    // very simple routing
+    if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $controller->edit($request, $id);
+    } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $controller->update($request, $id);
+    } elseif ($method === 'GET' && $path === '/') {
+        return $controller->index($request);
+    } else {
+        return new \GuzzleHttp\Psr7\Response(404, [], 'Not Found');
+    }
 }
 
 FunctionsFramework::cloudEvent('main_event', 'main_event');
