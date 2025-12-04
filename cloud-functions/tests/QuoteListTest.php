@@ -23,15 +23,15 @@ class QuoteListTest extends TestCase
         $quoteList = new QuoteList();
         $count = $quoteList->getTotalCount();
 
-        $this->assertIsInt($count);
+        $this->assertGreaterThanOrEqual(0, $count);
     }
 
     public function test_ページ指定でリストを取得できること()
     {
         $quoteList = new QuoteList();
-        $quotes = $quoteList->getListInPage(2);
+        $quotes = $quoteList->getListInPage(1);
 
-        $this->assertIsArray($quotes);
+        $this->assertNotEmpty($quotes);
         $this->assertContainsOnlyInstancesOf(Quote::class, $quotes);
     }
 }

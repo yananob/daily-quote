@@ -5,7 +5,7 @@ set -eu
 # source ./_cf-common/test/export_secrets.sh ${SECRETS[*]}
 
 # run tests
-# bash ./tests/run_linter.sh
+bash ./tests/run_linter.sh
 
 echo "Running PHPUnit..."
 php ./vendor/bin/phpunit

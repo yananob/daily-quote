@@ -5,4 +5,4 @@ set -eu
 # npm run lint public/js/
 
 echo "Running PHPStan..."
-php ./vendor/bin/phpstan analyze -c ../phpstan.neon
+php ./vendor/bin/phpstan analyze -c ./phpstan.neon
