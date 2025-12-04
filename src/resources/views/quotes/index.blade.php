@@ -21,6 +21,7 @@
                         <th>No</th>
                         <th>Message</th>
                         <th>Author</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,6 +30,13 @@
                         <td><a href="{{ route('quotes.edit', $quote) }}">{{ $quote->id }}</a></td>
                         <td>{{ $quote->message }}</td>
                         <td>{{ $quote->author }}</td>
+                        <td>
+                            <form action="{{ route('quotes.destroy', $quote) }}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+                                @csrf
+                                @method("delete")
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
