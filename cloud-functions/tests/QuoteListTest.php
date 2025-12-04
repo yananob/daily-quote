@@ -8,12 +8,22 @@ use PHPUnit\Framework\TestCase;
 use App\QuoteList;
 use App\Quote;
 
+/**
+ * @group integration
+ */
 class QuoteListTest extends TestCase
 {
+    private $quoteList;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->quoteList = new QuoteList();
+    }
+
     public function testGetRandomQuote()
     {
-        $quoteList = new QuoteList();
-        $quote = $quoteList->getRandomQuote();
+        $quote = $this->quoteList->getRandomQuote();
 
         $this->assertInstanceOf(Quote::class, $quote);
     }

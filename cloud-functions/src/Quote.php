@@ -32,16 +32,26 @@ class Quote
 
     public function getNo(): string
     {
-        return $this->data['no'];
+        return $this->data['no'] ?? '';
     }
 
     public function getMessage(): string
     {
-        return $this->data['message'];
+        return $this->data['message'] ?? '';
     }
 
     public function getAuthor(): string
     {
-        return $this->data['author'];
+        return $this->data['author'] ?? '';
+    }
+
+    public function getSource(): string
+    {
+        return $this->data['source'] ?? '';
+    }
+
+    public function getSourceLink(): string
+    {
+        return $this->data['source_link'] ?? '';
     }
 }
