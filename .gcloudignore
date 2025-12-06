@@ -29,6 +29,7 @@ gha-creds-*.json
 **/tests/
 **/tools/
 **/miscs/
+/_OLD/
 
 # for PHP
 _cf-common/

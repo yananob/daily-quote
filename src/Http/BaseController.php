@@ -14,6 +14,10 @@ abstract class BaseController
     {
         $views = __DIR__ . '/../../views';
         $cache = './tmp/cache';
+
+        if (!is_dir($cache)) {
+            mkdir($cache, 0777, true);
+        }
         $this->blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
     }
 }
