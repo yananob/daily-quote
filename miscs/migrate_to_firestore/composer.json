@@ -1,0 +1,6 @@
+{
+    "require": {
+        "google/cloud-firestore": "^1.34",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
