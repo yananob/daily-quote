@@ -17,7 +17,6 @@
         @endif
 
         <form action="/quotes/update/{{ $quote->getNo() }}" method="POST">
-            <input type="hidden" name="csrf" value="{{ $csrf }}">
             <div class="mb-3">
                 <label for="author" class="form-label">Author</label>
                 <input type="text" class="form-control" id="author" name="author" value="{{ $quote->getAuthor() }}">

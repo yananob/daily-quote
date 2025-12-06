@@ -41,7 +41,6 @@
                     <td>
                         <a href="/quotes/edit/{{ $quote->getNo() }}" class="btn btn-primary btn-sm">Edit</a>
                         <form action="/quotes/delete/{{ $quote->getNo() }}" method="POST" style="display:inline;">
-                            <input type="hidden" name="csrf" value="{{ $csrf }}">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>

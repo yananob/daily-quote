@@ -9,16 +9,14 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use App\QuoteList;
 
-use Gt\Csrf\TokenStore;
-
 class QuotesController extends BaseController
 {
     private const QUOTES_PER_PAGE = 20;
     private QuoteList $quoteList;
 
-    public function __construct(QuoteList $quoteList = null, TokenStore $tokenStore = null)
+    public function __construct(QuoteList $quoteList = null)
     {
-        parent::__construct($tokenStore);
+        parent::__construct();
         $this->quoteList = $quoteList ?? new QuoteList();
     }
 
