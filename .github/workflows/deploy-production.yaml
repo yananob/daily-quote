@@ -17,7 +17,7 @@ jobs:
   deploy:
     uses: yananob/cloud-functions-common/.github/workflows/deploy-cloud-functions.yaml@main
     with:
-      function_name: 'daily-quote2'
+      function_name: 'daily-quote'
       project_id: 'nobu5-393106'
       region: 'us-west1'
       service_account_name: 'cloud-run-functions-deployer'
