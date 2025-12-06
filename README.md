@@ -29,16 +29,3 @@ composer install
 - `APP_ENV=production`: 本番環境用の設定が使用されます。
 - `APP_ENV=test`: テスト環境用の設定が使用されます。
 
-## デプロイ
-
-`gcloud`コマンドラインツールを使用して、このファンクションをGoogle Cloud Functionsにデプロイします。
-
-```bash
-gcloud functions deploy main_event \\
-  --runtime php82 \\
-  --trigger-topic daily-quote-trigger \\
-  --entry-point main_event \\
-  --set-env-vars APP_ENV=production,LINE_TOKENS_N_TARGETS='{"tokens": {"stnb": "YOUR_TOKEN"}, "target_ids": {"stnb": "YOUR_TARGET_ID"}}'
-```
-
-デプロイコマンドの`--set-env-vars`オプションで、必須の環境変数を設定してください。
