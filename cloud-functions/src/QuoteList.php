@@ -92,14 +92,30 @@ class QuoteList
 
     public function create(array $data): void
     {
-        $this->quotesCollection->add(
-            [
-                'author' => $data['author'],
-                'message' => $data['message'],
-                'source' => $data['source'] ?? '',
-                'source_link' => $data['source_link'] ?? '',
-            ]
-        );
+        // 1. Find the highest existing quote number.
+        $query = $this->quotesCollection->orderBy('no', 'DESC')->limit(1);
+        $documents = $query->documents();
+
+        $lastNo = 0;
+        foreach ($documents as $document) {
+            if ($document->exists()) {
+                $lastNo = (int)$document->data()['no'];
+            }
+        }
+
+        // 2. Calculate the new quote number.
+        $newNo = $lastNo + 1;
+
+        // 3. Create a new document with the new number as ID.
+        $newDocument = $this->quotesCollection->document((string)$newNo);
+
+        $newDocument->set([
+            'no' => $newNo,
+            'author' => $data['author'],
+            'message' => $data['message'],
+            'source' => $data['source'] ?? '',
+            'source_link' => $data['source_link'] ?? '',
+        ]);
     }
 
     public function delete(int $id): void
