@@ -1,13 +1,16 @@
-name: Deploy Cloud Functions (production)
+name: Deploy Cloud Functions (test)
 on:
   push:
     branches:
-      - main
-      - move-to-cf
+      - test
+  pull_request:
+    types:
+      - opened
+      - synchronize
   workflow_dispatch:
 
 concurrency:
-  group: daily-quote-deploy-prod
+  group: daily-quote-deploy-test
 
 permissions:
   contents: 'read'
@@ -17,7 +20,7 @@ jobs:
   deploy:
     uses: yananob/cloud-functions-common/.github/workflows/deploy-cloud-functions.yaml@main
     with:
-      function_name: 'daily-quote2'
+      function_name: 'daily-quote-test'
       project_id: 'nobu5-393106'
       region: 'us-west1'
       service_account_name: 'cloud-run-functions-deployer'
