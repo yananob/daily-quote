@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - move-to-cf
   workflow_dispatch:
 
 concurrency:
