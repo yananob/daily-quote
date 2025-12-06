@@ -1,0 +1,38 @@
+name: Deploy Cloud Functions (production)
+on:
+  push:
+    branches:
+      - main
+      - move-to-cf
+  workflow_dispatch:
+
+concurrency:
+  group: daily-quote-deploy-prod
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
+jobs:
+  deploy:
+    uses: yananob/cloud-functions-common/.github/workflows/deploy-cloud-functions.yaml@main
+    with:
+      function_name: 'daily-quote'
+      project_id: 'nobu5-393106'
+      region: 'us-west1'
+      service_account_name: 'cloud-run-functions-deployer'
+      gcp_project_number: '1035100650942'
+      wip_pool_name: 'github-actions-pool'
+      wip_provider_name: 'github-provider'
+      secrets_project_id: 'nobu5-393106'
+      secrets_config: |-
+        FIREBASE_CONFIG
+        LINE_TOKENS_N_TARGETS
+      deploy_http_trigger: true
+      deploy_event_trigger: true
+      http_max_instance_count: 1
+      memory: '256M'
+      http_timeout: '5m'
+      event_timeout: '5m'
+      build_environment_variables:  # うまく展開されてないみたい
+        APP_ENV=production
