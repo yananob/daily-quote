@@ -27,11 +27,12 @@ jobs:
       secrets_project_id: 'nobu5-393106'
       secrets_config: |-
         FIREBASE_CONFIG
+        LINE_TOKENS_N_TARGETS
       deploy_http_trigger: true
       deploy_event_trigger: true
       http_max_instance_count: 1
       memory: '256M'
       http_timeout: '5m'
       event_timeout: '5m'
-      build_environment_variables:
+      build_environment_variables:  # うまく展開されてないみたい
         APP_ENV=production
