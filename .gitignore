@@ -1,6 +1,20 @@
-/configs/
+config.json
+**/configs/*.json
+**/configs/*.json.bak
+
+tmp/
+_deploy/
+
+# for PHP
+**/cache/
+**/templates_c/
+**/vendor/
 .env
 .env.testing
-gcp-cred.json
 .phpunit.*cache
-**/tmp/**
+gcp-cred.json
+
+# gemini-cli settings
+.gemini/
+# GitHub App credentials
+gha-creds-*.json
