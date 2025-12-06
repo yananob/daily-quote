@@ -45,7 +45,7 @@ class AppConfig
     public static function getLineDeliverTarget(): string
     {
         return match (self::getEnvironment()) {
-            'production' => 'stnb',
+            'production' => 'nobu', // TODO!!!
             'test' => 'nobu',
             default => 'nobu',
         };

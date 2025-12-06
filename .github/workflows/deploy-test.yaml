@@ -36,3 +36,4 @@ jobs:
       memory: '256M'
       http_timeout: '5m'
       event_timeout: '5m'
+      build_environment_variables: 'APP_ENV=test'
