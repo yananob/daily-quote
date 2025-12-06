@@ -22,6 +22,11 @@
             "label": "listen_local_event",
             "type": "shell",
             "command": "./tests/listen_local_event.sh"
+        },
+        {
+            "label": "merge and deploy main",
+            "type": "shell",
+            "command": "miscs/merge_and_deploy_main.sh"
         }
     ]
 }
