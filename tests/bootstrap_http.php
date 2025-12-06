@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-$environment = $_ENV['APP_ENV'] ?? 'testing'; 
+/**
+ * ローカル環境用のBootstrapファイル。APP_ENVをセットする。
+ */
 
-// Composerのオートローダーはテスト時にも必要やで
+$environment = $_ENV['APP_ENV'] ?? 'local';
+
+// Composerのオートローダーはテスト時にも必要
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 // Functions Frameworkのrouter.phpに処理を渡す

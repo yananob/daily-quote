@@ -5,7 +5,7 @@ declare(strict_types=1);
 // Composerのオートローダーはテスト時にも必要やで
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use Dotenv\Dotenv;
+// use Dotenv\Dotenv;
 
 // 1. PHPUnitによって APP_ENV="testing" がセットされてるはずやけど、念の為チェック！
 $environment = $_ENV['APP_ENV'] ?? 'development'; 
@@ -22,12 +22,12 @@ if ($environment === 'testing') {
     array_unshift($files, '.env.testing');
 }
 
-// 5. Dotenvをロードする
-$dotenv = Dotenv::createImmutable($rootPath, $files);
+// // 5. Dotenvをロードする
+// $dotenv = Dotenv::createImmutable($rootPath, $files);
 
-// .envファイルが存在しない場合でも、エラーを出さずに読み込みをスキップしてくれる
-// $dotenv->safeLoad();
-$dotenv->load();
+// // .envファイルが存在しない場合でも、エラーを出さずに読み込みをスキップしてくれる
+// // $dotenv->safeLoad();
+// $dotenv->load();
 
 // これで、テストコード内で $_ENV['DB_NAME'] が "my_app_test" になってるはずや！
 

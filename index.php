@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\AppConfig;
 use Google\CloudFunctions\FunctionsFramework;
 use Psr\Http\Message\ServerRequestInterface;
 use CloudEvents\V1\CloudEventInterface;
-use Dotenv\Dotenv;
+// use Dotenv\Dotenv;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use LINE\Clients\MessagingApi\Model\PushMessageRequest;
@@ -23,8 +24,8 @@ function initialize(): void
     if ($environment !== 'local') {
         array_unshift($file_to_load, ".env.{$environment}");
     }
-    $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
-    $dotenv->load();
+    // $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
+    // $dotenv->load();
     // $dotenv->required(['FIREBASE_CONFIG', 'LINE_TOKENS_N_TARGETS', 'LINE_DELIVER_TARGET'])->notEmpty();
 
     $_ENV['APP_ENV'] = $environment;
@@ -76,7 +77,7 @@ function main_event(CloudEventInterface $event): void
 
     $client = new \GuzzleHttp\Client();
     $config = new \LINE\Clients\MessagingApi\Configuration();
-    $lineDeliverTarget = 'nobu'; // TODO!
+    $lineDeliverTarget = AppConfig::getLineDeliverTarget();
     $lineConfig = json_decode(getenv('LINE_TOKENS_N_TARGETS'));
     $config->setAccessToken($lineConfig->tokens->$lineDeliverTarget);
     $messagingApi = new \LINE\Clients\MessagingApi\Api\MessagingApiApi(

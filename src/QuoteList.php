@@ -20,7 +20,7 @@ class QuoteList
                 'keyFile' => $gcpServiceAccount,
             ]
         );
-        $this->rootCollection = $firestore->collection($_ENV['FIRESTORE_ROOT_COLLECTION']);
+        $this->rootCollection = $firestore->collection(AppConfig::getFirestoreRootCollection());
         $this->quotesCollection = $this->rootCollection->document('quotes')->collection('quotes');
     }
 
