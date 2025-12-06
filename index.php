@@ -42,26 +42,27 @@ function main_http(ServerRequestInterface $request)
 
     $controller = new QuotesController();
 
+    $basePath = AppConfig::getBasePath();
     $path = $request->getUri()->getPath();
     $method = $request->getMethod();
 
     $log->info("{$method} {$path}");
 
     // very simple routing
-    if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
+    if ($method === 'GET' && preg_match('#^' . $basePath . '/quotes/edit/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $controller->edit($request, $id);
-    } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
+    } elseif ($method === 'POST' && preg_match('#^' . $basePath . '/quotes/update/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $controller->update($request, $id);
-    } elseif ($method === 'GET' && $path === '/quotes/new') {
+    } elseif ($method === 'GET' && $path === $basePath . '/quotes/new') {
         return $controller->new($request);
-    } elseif ($method === 'POST' && $path === '/quotes/store') {
+    } elseif ($method === 'POST' && $path === $basePath . '/quotes/store') {
         return $controller->store($request);
-    } elseif ($method === 'POST' && preg_match('#^/quotes/delete/(\d+)$#', $path, $matches)) {
+    } elseif ($method === 'POST' && preg_match('#^' . $basePath . '/quotes/delete/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $controller->delete($request, $id);
-    } elseif ($method === 'GET' && $path === '/') {
+    } elseif ($method === 'GET' && ($path === $basePath || $path === $basePath . '/')) {
         return $controller->index($request);
     } else {
         return new \GuzzleHttp\Psr7\Response(404, [], 'Not Found');

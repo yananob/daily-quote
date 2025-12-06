@@ -16,7 +16,7 @@
             </div>
         @endif
 
-        <form action="/quotes/store" method="POST">
+        <form action="{{ $basePath }}/quotes/store" method="POST">
             <div class="mb-3">
                 <label for="author" class="form-label">Author</label>
                 <input type="text" class="form-control" id="author" name="author" value="{{ $quote['author'] ?? '' }}">

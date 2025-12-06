@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http;
 
+use App\AppConfig;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
@@ -80,7 +81,7 @@ class QuotesController extends BaseController
             'source_link' => $data['source_link'],
         ]);
 
-        return new Response(302, ['Location' => '/']);
+        return new Response(302, ['Location' => AppConfig::getBasePath() . '/']);
     }
 
     public function new(ServerRequestInterface $request): ResponseInterface
@@ -108,13 +109,13 @@ class QuotesController extends BaseController
             'source_link' => $data['source_link'],
         ]);
 
-        return new Response(302, ['Location' => '/']);
+        return new Response(302, ['Location' => AppConfig::getBasePath() . '/']);
     }
 
     public function delete(ServerRequestInterface $request, int $id): ResponseInterface
     {
         $this->quoteList->delete($id);
 
-        return new Response(302, ['Location' => '/']);
+        return new Response(302, ['Location' => AppConfig::getBasePath() . '/']);
     }
 }

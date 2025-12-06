@@ -12,7 +12,7 @@
         <h1 class="mb-4">Quotes</h1>
 
         <div class="mb-3">
-            <a href="/quotes/new" class="btn btn-primary">Create Quote</a>
+            <a href="{{ $basePath }}/quotes/new" class="btn btn-primary">Create Quote</a>
         </div>
 
         <table class="table table-striped table-bordered">
@@ -39,8 +39,8 @@
                         @endif
                     </td>
                     <td>
-                        <a href="/quotes/edit/{{ $quote->getNo() }}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="/quotes/delete/{{ $quote->getNo() }}" method="POST" style="display:inline;">
+                        <a href="{{ $basePath }}/quotes/edit/{{ $quote->getNo() }}" class="btn btn-primary btn-sm">Edit</a>
+                        <form action="{{ $basePath }}/quotes/delete/{{ $quote->getNo() }}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>
