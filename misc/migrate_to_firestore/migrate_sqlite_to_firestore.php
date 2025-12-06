@@ -3,7 +3,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Google\Cloud\Firestore\FirestoreClient;
-use Dotenv\Dotenv;
+// use Dotenv\Dotenv;
 
 // =================================================================
 //  NOTE
@@ -37,8 +37,8 @@ use Dotenv\Dotenv;
 // =================================================================
 
 // Load environment variables from .env file
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// $dotenv = Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
 
 // --- SQLite Configuration ---
 $sqliteDbPath = $_ENV['SQLITE_DB_PATH'] ?? null;

@@ -5,8 +5,6 @@ declare(strict_types=1);
 // Composerのオートローダーはテスト時にも必要やで
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-// use Dotenv\Dotenv;
-
 // 1. PHPUnitによって APP_ENV="testing" がセットされてるはずやけど、念の為チェック！
 $environment = $_ENV['APP_ENV'] ?? 'development'; 
 
