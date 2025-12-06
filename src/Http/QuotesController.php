@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http;
 
-use App\AppConfig;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
+use App\AppConfig;
 use App\QuoteList;
 
 class QuotesController extends BaseController

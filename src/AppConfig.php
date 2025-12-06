@@ -59,7 +59,8 @@ class AppConfig
     public static function getBasePath(): string
     {
         return match (self::getEnvironment()) {
-            'production', 'test' => '/daily-quote',
+            'production' => '/daily-quote',
+            'test' => '/daily-quote-test',
             default => '',
         };
     }
