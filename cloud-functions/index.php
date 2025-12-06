@@ -53,6 +53,13 @@ function main_http(ServerRequestInterface $request)
     } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $controller->update($request, $id);
+    } elseif ($method === 'GET' && $path === '/quotes/new') {
+        return $controller->new($request);
+    } elseif ($method === 'POST' && $path === '/quotes/store') {
+        return $controller->store($request);
+    } elseif ($method === 'POST' && preg_match('#^/quotes/delete/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $controller->delete($request, $id);
     } elseif ($method === 'GET' && $path === '/') {
         return $controller->index($request);
     } else {
