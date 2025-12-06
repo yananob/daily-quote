@@ -89,4 +89,21 @@ class QuoteList
             ['merge' => true]
         );
     }
+
+    public function create(array $data): void
+    {
+        $this->quotesCollection->add(
+            [
+                'author' => $data['author'],
+                'message' => $data['message'],
+                'source' => $data['source'] ?? '',
+                'source_link' => $data['source_link'] ?? '',
+            ]
+        );
+    }
+
+    public function delete(int $id): void
+    {
+        $this->quotesCollection->document((string)$id)->delete();
+    }
 }

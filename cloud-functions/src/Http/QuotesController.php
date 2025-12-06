@@ -9,14 +9,16 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use App\QuoteList;
 
+use Gt\Csrf\TokenStore;
+
 class QuotesController extends BaseController
 {
     private const QUOTES_PER_PAGE = 20;
     private QuoteList $quoteList;
 
-    public function __construct(QuoteList $quoteList = null)
+    public function __construct(QuoteList $quoteList = null, TokenStore $tokenStore = null)
     {
-        parent::__construct();
+        parent::__construct($tokenStore);
         $this->quoteList = $quoteList ?? new QuoteList();
     }
 
@@ -79,6 +81,41 @@ class QuotesController extends BaseController
             'source' => $data['source'],
             'source_link' => $data['source_link'],
         ]);
+
+        return new Response(302, ['Location' => '/']);
+    }
+
+    public function new(ServerRequestInterface $request): ResponseInterface
+    {
+        $body = $this->blade->run('quotes.new');
+        return new Response(200, ['Content-Type' => 'text/html'], $body);
+    }
+
+    public function store(ServerRequestInterface $request): ResponseInterface
+    {
+        $data = $request->getParsedBody();
+
+        if (empty($data['author']) || empty($data['message'])) {
+            $body = $this->blade->run('quotes.new', [
+                'error' => 'Author and message cannot be empty.',
+                'quote' => $data,
+            ]);
+            return new Response(400, ['Content-Type' => 'text/html'], $body);
+        }
+
+        $this->quoteList->create([
+            'author' => $data['author'],
+            'message' => $data['message'],
+            'source' => $data['source'],
+            'source_link' => $data['source_link'],
+        ]);
+
+        return new Response(302, ['Location' => '/']);
+    }
+
+    public function delete(ServerRequestInterface $request, int $id): ResponseInterface
+    {
+        $this->quoteList->delete($id);
 
         return new Response(302, ['Location' => '/']);
     }

@@ -14,9 +14,12 @@ use LINE\Clients\MessagingApi\Model\PushMessageRequest;
 use LINE\Clients\MessagingApi\Model\TextMessage;
 use App\QuoteList;
 use App\Http\QuotesController;
+use Gt\Csrf\SessionTokenStore;
+use Gt\Session\Session;
 
 function initialize(): void
 {
+    session_start();
     $environment = $_ENV['APP_ENV'] ?? 'testing';
 
     $file_to_load = ['.env'];   // デフォルトは .env
@@ -39,7 +42,9 @@ function main_http(ServerRequestInterface $request)
     $log->pushHandler(new StreamHandler('php://stderr'));
     $log->info('Function triggered with ' . $_ENV['APP_ENV'] . ' environment.');
 
-    $controller = new QuotesController();
+    $session = new Session();
+    $tokenStore = new SessionTokenStore($session);
+    $controller = new QuotesController(null, $tokenStore);
 
     $path = $request->getUri()->getPath();
     $method = $request->getMethod();
@@ -47,12 +52,27 @@ function main_http(ServerRequestInterface $request)
     $log->info("{$method} {$path}");
 
     // very simple routing
+    if ($method === 'POST') {
+        try {
+            $tokenStore->verify($request->getParsedBody()['csrf'] ?? '');
+        } catch (\Gt\Csrf\Exception\CSRFException $e) {
+            return new \GuzzleHttp\Psr7\Response(403, [], 'Invalid CSRF token');
+        }
+    }
+
     if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $controller->edit($request, $id);
     } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $controller->update($request, $id);
+    } elseif ($method === 'GET' && $path === '/quotes/new') {
+        return $controller->new($request);
+    } elseif ($method === 'POST' && $path === '/quotes/store') {
+        return $controller->store($request);
+    } elseif ($method === 'POST' && preg_match('#^/quotes/delete/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $controller->delete($request, $id);
     } elseif ($method === 'GET' && $path === '/') {
         return $controller->index($request);
     } else {
