@@ -15,7 +15,12 @@ class QuoteList
 
     public function __construct()
     {
-        $firestore = new FirestoreClient();
+        $gcpServiceAccount = json_decode(getenv('FIREBASE_CONFIG'), true);
+        $firestore = new FirestoreClient(
+            [
+                'keyFile' => $gcpServiceAccount,
+            ]
+        );
         $this->rootCollection = $firestore->collection($_ENV['FIRESTORE_ROOT_COLLECTION']);
         $this->quotesCollection = $this->rootCollection->document('quotes')->collection('quotes');
     }
