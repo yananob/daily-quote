@@ -21,11 +21,5 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
-    },
-    "scripts": {
-        "start": [
-            "Composer\\Config::disableProcessTimeout",
-            "php -S localhost:${PORT:-8080} tests/bootstrap_http.php"
-        ]
     }
 }

@@ -18,18 +18,18 @@ use App\Http\QuotesController;
 
 function initialize(): void
 {
-    $environment = $_ENV['APP_ENV'] ?? 'testing';
+    // $environment = $_ENV['APP_ENV'] ?? 'testing';
 
-    $file_to_load = ['.env'];   // デフォルトは .env
-    if ($environment !== 'local') {
-        array_unshift($file_to_load, ".env.{$environment}");
-    }
-    // $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
-    // $dotenv->load();
-    // $dotenv->required(['FIREBASE_CONFIG', 'LINE_TOKENS_N_TARGETS', 'LINE_DELIVER_TARGET'])->notEmpty();
+    // $file_to_load = ['.env'];   // デフォルトは .env
+    // if ($environment !== 'local') {
+    //     array_unshift($file_to_load, ".env.{$environment}");
+    // }
+    // // $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
+    // // $dotenv->load();
+    // // $dotenv->required(['FIREBASE_CONFIG', 'LINE_TOKENS_N_TARGETS', 'LINE_DELIVER_TARGET'])->notEmpty();
 
-    $_ENV['APP_ENV'] = $environment;
-    // var_dump($_ENV);
+    // $_ENV['APP_ENV'] = $environment;
+    // // var_dump($_ENV);
 }
 initialize();
 
@@ -38,7 +38,7 @@ function main_http(ServerRequestInterface $request)
 {
     $log = new Logger('main_http');
     $log->pushHandler(new StreamHandler('php://stderr'));
-    $log->info('Function triggered with ' . $_ENV['APP_ENV'] . ' environment.');
+    $log->info('Function triggered with ' . AppConfig::getEnvironment() . ' environment.');
 
     $controller = new QuotesController();
 
@@ -73,7 +73,7 @@ function main_event(CloudEventInterface $event): void
 {
     $log = new Logger('main_event');
     $log->pushHandler(new StreamHandler('php://stderr'));
-    $log->info('Function triggered.');
+    $log->info('Function triggered with ' . AppConfig::getEnvironment() . ' environment.');
 
     $client = new \GuzzleHttp\Client();
     $config = new \LINE\Clients\MessagingApi\Configuration();

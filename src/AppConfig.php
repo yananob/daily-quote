@@ -18,7 +18,7 @@ class AppConfig
      *
      * @return string 現在の環境 ('production', 'test', または 'development')。
      */
-    private static function getEnvironment(): string
+    public static function getEnvironment(): string
     {
         return getenv('APP_ENV');
     }

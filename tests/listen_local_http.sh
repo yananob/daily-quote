@@ -10,7 +10,8 @@ source ./_cf-common/test/export_secrets.sh ${SECRETS[*]}
 # pushd cloud-functions
 
 export FUNCTION_TARGET=main_http
-composer start
+# composer start
+php -S localhost:8080 tests/bootstrap_local.php
 
 # popd
 
