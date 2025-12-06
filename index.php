@@ -25,7 +25,7 @@ function initialize(): void
     }
     $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
     $dotenv->load();
-    $dotenv->required(['LINE_BOT_CHANNEL_ACCESS_TOKEN', 'LINE_DELIVER_TARGET'])->notEmpty();
+    // $dotenv->required(['FIREBASE_CONFIG', 'LINE_TOKENS_N_TARGETS', 'LINE_DELIVER_TARGET'])->notEmpty();
 
     $_ENV['APP_ENV'] = $environment;
     // var_dump($_ENV);
@@ -76,13 +76,13 @@ function main_event(CloudEventInterface $event): void
 
     $client = new \GuzzleHttp\Client();
     $config = new \LINE\Clients\MessagingApi\Configuration();
-    $config->setAccessToken($_ENV['LINE_BOT_CHANNEL_ACCESS_TOKEN']);
+    $lineDeliverTarget = 'nobu'; // TODO!
+    $lineConfig = json_decode(getenv('LINE_TOKENS_N_TARGETS'));
+    $config->setAccessToken($lineConfig->tokens->$lineDeliverTarget);
     $messagingApi = new \LINE\Clients\MessagingApi\Api\MessagingApiApi(
         client: $client,
         config: $config,
     );
-
-    $lineDeliverTarget = $_ENV['LINE_DELIVER_TARGET'];
 
     $quote = (new QuoteList())->getRandomQuote();
 
@@ -91,7 +91,7 @@ function main_event(CloudEventInterface $event): void
 
     $message = new TextMessage(['text' => $message]);
     $request = new PushMessageRequest([
-        'to' => $lineDeliverTarget,
+        'to' => $lineConfig->target_ids->$lineDeliverTarget,
         'messages' => [$message],
     ]);
     $response = $messagingApi->pushMessage($request);

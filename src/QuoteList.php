@@ -6,7 +6,6 @@ namespace App;
 
 use Google\Cloud\Firestore\CollectionReference;
 use Google\Cloud\Firestore\FirestoreClient;
-use Google\Cloud\Firestore\FieldPath;
 
 class QuoteList
 {
