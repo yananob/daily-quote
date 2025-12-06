@@ -5,8 +5,10 @@ on:
       - test
   pull_request:
     types:
-      - opened
-      - synchronize
+      - 'opened'
+      - 'synchronize'
+      - 'edited'
+      - 'reopened'
   workflow_dispatch:
 
 concurrency:
@@ -36,4 +38,5 @@ jobs:
       memory: '256M'
       http_timeout: '5m'
       event_timeout: '5m'
-      build_environment_variables: 'APP_ENV=test'
+      build_environment_variables:
+        APP_ENV=test
