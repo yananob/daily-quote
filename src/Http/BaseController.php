@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http;
 
 use eftec\bladeone\BladeOne;
+use App\AppConfig;
 
 abstract class BaseController
 {
@@ -19,5 +20,7 @@ abstract class BaseController
             mkdir($cache, 0777, true);
         }
         $this->blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
+
+        $this->blade->share('basePath', AppConfig::getBasePath());
     }
 }

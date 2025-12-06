@@ -50,4 +50,18 @@ class AppConfig
             default => 'nobu',
         };
     }
+
+    /**
+     * アプリケーションのベースパスを取得します。
+     *
+     * @return string ベースパス。
+     */
+    public static function getBasePath(): string
+    {
+        return match (self::getEnvironment()) {
+            'production' => '/daily-quote',
+            'test' => '/daily-quote-test',
+            default => '',
+        };
+    }
 }
