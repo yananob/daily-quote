@@ -51,7 +51,7 @@ $firestoreProjectId = $_ENV['FIRESTORE_PROJECT_ID'] ?? null;
 if (!$firestoreProjectId) {
     die("Error: FIRESTORE_PROJECT_ID is not defined in the .env file.\n");
 }
-$firestoreCollectionPath = 'daily-quotes-test/quotes/quotes';
+$firestoreCollectionPath = 'daily-quotes/quotes/quotes';
 
 // =================================================================
 //  Main Script
