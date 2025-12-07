@@ -13,7 +13,16 @@ class FirestoreService
     public static function getClient(): FirestoreClient
     {
         if (self::$client === null) {
-            self::$client = new FirestoreClient();
+            $gcpServiceAccount = json_decode(getenv('FIREBASE_CONFIG'), true);
+            if ($gcpServiceAccount) {
+                self::$client = new FirestoreClient(
+                    [
+                        'keyFile' => $gcpServiceAccount,
+                    ]
+                );
+            } else {
+                self::$client = new FirestoreClient();
+            }
         }
 
         return self::$client;

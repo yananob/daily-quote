@@ -17,7 +17,6 @@ use App\QuoteList;
 use App\Http\QuotesController;
 use App\Http\AuthController;
 use App\Service\AuthService;
-use Google\Cloud\Core\Exception\ServiceException;
 
 function initialize(): void
 {
@@ -39,75 +38,51 @@ initialize();
 FunctionsFramework::http('main_http', 'main_http');
 function main_http(ServerRequestInterface $request)
 {
-    try {
-        $log = new Logger('main_http');
-        $log->pushHandler(new StreamHandler('php://stderr'));
-        $log->info('Function triggered with ' . AppConfig::getEnvironment() . ' environment.');
+    $log = new Logger('main_http');
+    $log->pushHandler(new StreamHandler('php://stderr'));
+    $log->info('Function triggered with ' . AppConfig::getEnvironment() . ' environment.');
 
-        $authService = new AuthService();
-        $quotesController = new QuotesController();
-        $authController = new AuthController();
+    $authService = new AuthService();
+    $quotesController = new QuotesController();
+    $authController = new AuthController();
 
-        $path = $request->getUri()->getPath();
-        $method = $request->getMethod();
+    $path = $request->getUri()->getPath();
+    $method = $request->getMethod();
 
-        $log->info("{$method} {$path}");
+    $log->info("{$method} {$path}");
 
-        // Public routes
-        if ($method === 'GET' && $path === '/login') {
-            return $authController->showLoginForm();
-        } elseif ($method === 'POST' && $path === '/login') {
-            return $authController->login($request);
-        } elseif ($method === 'GET' && $path === '/logout') {
-            return $authController->logout();
-        }
+    // Public routes
+    if ($method === 'GET' && $path === '/login') {
+        return $authController->showLoginForm();
+    } elseif ($method === 'POST' && $path === '/login') {
+        return $authController->login($request);
+    } elseif ($method === 'GET' && $path === '/logout') {
+        return $authController->logout();
+    }
 
-        // Authentication check
-        if (!$authService->isAuthenticated()) {
-            return new \GuzzleHttp\Psr7\Response(302, ['Location' => AppConfig::getBasePath() . '/login']);
-        }
+    // Authentication check
+    if (!$authService->isAuthenticated()) {
+        return new \GuzzleHttp\Psr7\Response(302, ['Location' => AppConfig::getBasePath() . '/login']);
+    }
 
-        // Protected routes
-        if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
-            $id = (int)$matches[1];
-            return $quotesController->edit($request, $id);
-        } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
-            $id = (int)$matches[1];
-            return $quotesController->update($request, $id);
-        } elseif ($method === 'GET' && $path === '/quotes/new') {
-            return $quotesController->new($request);
-        } elseif ($method === 'POST' && $path === '/quotes/store') {
-            return $quotesController->store($request);
-        } elseif ($method === 'POST' && preg_match('#^/quotes/delete/(\d+)$#', $path, $matches)) {
-            $id = (int)$matches[1];
-            return $quotesController->delete($request, $id);
-        } elseif ($method === 'GET' && $path === '/') {
-            return $quotesController->index($request);
-        } else {
-            return new \GuzzleHttp\Psr7\Response(404, [], 'Not Found');
-        }
-    } catch (ServiceException $e) {
-        if ($e->getCode() === 7) {
-            $body = <<<HTML
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Permission Denied</title>
-</head>
-<body>
-    <h1>Permission Denied</h1>
-    <p>
-        The application is missing the necessary permissions to access Firestore.
-        Please ensure that the service account has the 'Cloud Datastore User' role.
-        If you are running locally, make sure you have authenticated with the gcloud CLI
-        and have set the GOOGLE_APPLICATION_CREDENTIALS environment variable.
-    </p>
-</body>
-</html>
-HTML;
-            return new \GuzzleHttp\Psr7\Response(500, ['Content-Type' => 'text/html'], $body);
-        }
-        throw $e;
+    // Protected routes
+    if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $quotesController->edit($request, $id);
+    } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $quotesController->update($request, $id);
+    } elseif ($method === 'GET' && $path === '/quotes/new') {
+        return $quotesController->new($request);
+    } elseif ($method === 'POST' && $path === '/quotes/store') {
+        return $quotesController->store($request);
+    } elseif ($method === 'POST' && preg_match('#^/quotes/delete/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $quotesController->delete($request, $id);
+    } elseif ($method === 'GET' && $path === '/') {
+        return $quotesController->index($request);
+    } else {
+        return new \GuzzleHttp\Psr7\Response(404, [], 'Not Found');
     }
 }
 
