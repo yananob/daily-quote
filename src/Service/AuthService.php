@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Google\Cloud\Firestore\FirestoreClient;
+use App\AppConfig;
 
 class AuthService
 {
     private const COOKIE_NAME = 'auth_token';
     private const COOKIE_EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // 1 week
 
-    private FirestoreClient $firestore;
-
     public function __construct()
     {
-        $this->firestore = new FirestoreClient();
     }
 
     public function isAuthenticated(): bool
@@ -47,7 +44,7 @@ class AuthService
 
     private function getPasswordFromFirestore(): ?string
     {
-        $document = $this->firestore->collection('admin')->document('admin')->snapshot();
+        $document = AppConfig::getAdminDocument()->snapshot();
         if ($document->exists()) {
             return $document->get('password');
         }
@@ -72,7 +69,7 @@ class AuthService
     public function setPassword(string $password): void
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $this->firestore->collection('admin')->document('admin')->set([
+        AppConfig::getAdminDocument()->set([
             'password' => $hashedPassword,
         ]);
     }
