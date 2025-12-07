@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Service\FirestoreService;
 use Google\Cloud\Firestore\CollectionReference;
-use Google\Cloud\Firestore\FirestoreClient;
 
 class QuoteList
 {
@@ -14,12 +14,7 @@ class QuoteList
 
     public function __construct()
     {
-        $gcpServiceAccount = json_decode(getenv('FIREBASE_CONFIG'), true);
-        $firestore = new FirestoreClient(
-            [
-                'keyFile' => $gcpServiceAccount,
-            ]
-        );
+        $firestore = FirestoreService::getClient();
         $this->rootCollection = $firestore->collection(AppConfig::getFirestoreRootCollection());
         $this->quotesCollection = $this->rootCollection->document('quotes')->collection('quotes');
     }

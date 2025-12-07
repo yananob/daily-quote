@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use Google\Cloud\Firestore\DocumentReference;
-use Google\Cloud\Firestore\FirestoreClient;
-
 /**
  * アプリケーション環境に基づいて設定値を提供します。
  * 環境は`APP_ENV`環境変数によって決定されます。
@@ -68,29 +65,4 @@ class AppConfig
         };
     }
 
-    /**
-     * Firestoreクライアントのインスタンスを取得します。
-     *
-     * @return FirestoreClient Firestoreクライアント。
-     */
-    public static function getFirestoreClient(): FirestoreClient
-    {
-        static $firestoreClient = null;
-        if ($firestoreClient === null) {
-            $firestoreClient = new FirestoreClient();
-        }
-        return $firestoreClient;
-    }
-
-    /**
-     * 管理者設定ドキュメントへの参照を取得します。
-     *
-     * @return DocumentReference 管理者ドキュメントへの参照。
-     */
-    public static function getAdminDocument(): DocumentReference
-    {
-        $firestore = self::getFirestoreClient();
-        return $firestore->collection(self::getFirestoreRootCollection())
-            ->document('admin');
-    }
 }

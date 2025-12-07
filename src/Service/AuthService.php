@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\AppConfig;
+use App\Service\FirestoreService;
 
 class AuthService
 {
@@ -44,7 +45,10 @@ class AuthService
 
     private function getPasswordFromFirestore(): ?string
     {
-        $document = AppConfig::getAdminDocument()->snapshot();
+        $document = FirestoreService::getClient()
+            ->collection(AppConfig::getFirestoreRootCollection())
+            ->document('admin')
+            ->snapshot();
         if ($document->exists()) {
             return $document->get('password');
         }
@@ -69,8 +73,11 @@ class AuthService
     public function setPassword(string $password): void
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        AppConfig::getAdminDocument()->set([
-            'password' => $hashedPassword,
-        ]);
+        FirestoreService::getClient()
+            ->collection(AppConfig::getFirestoreRootCollection())
+            ->document('admin')
+            ->set([
+                'password' => $hashedPassword,
+            ]);
     }
 }
