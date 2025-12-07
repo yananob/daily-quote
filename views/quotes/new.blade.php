@@ -34,6 +34,7 @@
                 <input type="text" class="form-control" id="source_link" name="source_link" value="{{ $quote['source_link'] ?? '' }}">
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
+            <a href="{{ $basePath }}/" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

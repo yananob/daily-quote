@@ -34,6 +34,7 @@
                 <input type="text" class="form-control" id="source_link" name="source_link" value="{{ $quote->getSourceLink() }}">
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{{ $basePath }}/" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

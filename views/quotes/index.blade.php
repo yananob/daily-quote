@@ -21,8 +21,6 @@
                     <th>No</th>
                     <th>Message</th>
                     <th>Author</th>
-                    <th>Source</th>
-                    <th>Source Link</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -32,14 +30,11 @@
                     <td>{{ $quote->getNo() }}</td>
                     <td>{{ $quote->getMessage() }}</td>
                     <td>{{ $quote->getAuthor() }}</td>
-                    <td>{{ $quote->getSource() }}</td>
-                    <td>
-                        @if ($quote->getSourceLink())
-                            <a href="{{ $quote->getSourceLink() }}" target="_blank">Link</a>
-                        @endif
-                    </td>
                     <td>
                         <a href="{{ $basePath }}/quotes/edit/{{ $quote->getNo() }}" class="btn btn-primary btn-sm">Edit</a>
+                        @if ($quote->getSourceLink())
+                            <a href="{{ $quote->getSourceLink() }}" target="_blank" class="btn btn-info btn-sm">Link</a>
+                        @endif
                         <form action="{{ $basePath }}/quotes/delete/{{ $quote->getNo() }}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
