@@ -18,3 +18,5 @@ gcp-cred.json
 .gemini/
 # GitHub App credentials
 gha-creds-*.json
+dummy_credentials.json
+server.log
