@@ -15,6 +15,8 @@ use LINE\Clients\MessagingApi\Model\PushMessageRequest;
 use LINE\Clients\MessagingApi\Model\TextMessage;
 use App\QuoteList;
 use App\Http\QuotesController;
+use App\Http\AuthController;
+use App\Service\AuthService;
 
 function initialize(): void
 {
@@ -40,29 +42,45 @@ function main_http(ServerRequestInterface $request)
     $log->pushHandler(new StreamHandler('php://stderr'));
     $log->info('Function triggered with ' . AppConfig::getEnvironment() . ' environment.');
 
-    $controller = new QuotesController();
+    $authService = new AuthService();
+    $quotesController = new QuotesController();
+    $authController = new AuthController();
 
     $path = $request->getUri()->getPath();
     $method = $request->getMethod();
 
     $log->info("{$method} {$path}");
 
-    // very simple routing
+    // Public routes
+    if ($method === 'GET' && $path === '/login') {
+        return $authController->showLoginForm();
+    } elseif ($method === 'POST' && $path === '/login') {
+        return $authController->login($request);
+    } elseif ($method === 'GET' && $path === '/logout') {
+        return $authController->logout();
+    }
+
+    // Authentication check
+    if (!$authService->isAuthenticated()) {
+        return new \GuzzleHttp\Psr7\Response(302, ['Location' => AppConfig::getBasePath() . '/login']);
+    }
+
+    // Protected routes
     if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
-        return $controller->edit($request, $id);
+        return $quotesController->edit($request, $id);
     } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
-        return $controller->update($request, $id);
+        return $quotesController->update($request, $id);
     } elseif ($method === 'GET' && $path === '/quotes/new') {
-        return $controller->new($request);
+        return $quotesController->new($request);
     } elseif ($method === 'POST' && $path === '/quotes/store') {
-        return $controller->store($request);
+        return $quotesController->store($request);
     } elseif ($method === 'POST' && preg_match('#^/quotes/delete/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
-        return $controller->delete($request, $id);
+        return $quotesController->delete($request, $id);
     } elseif ($method === 'GET' && $path === '/') {
-        return $controller->index($request);
+        return $quotesController->index($request);
     } else {
         return new \GuzzleHttp\Psr7\Response(404, [], 'Not Found');
     }
