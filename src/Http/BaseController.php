@@ -6,7 +6,7 @@ namespace App\Http;
 use App\AppConfig;
 use eftec\bladeone\BladeOne;
 
-class BaseController
+abstract class BaseController
 {
     protected BladeOne $blade;
 
