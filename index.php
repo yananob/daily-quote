@@ -44,7 +44,7 @@ function main_http(ServerRequestInterface $request)
 
     $authService = new AuthService();
     $quotesController = new QuotesController();
-    $authController = new AuthController();
+    $authController = new AuthController($authService);
 
     $path = $request->getUri()->getPath();
     $method = $request->getMethod();
