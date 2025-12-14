@@ -15,12 +15,10 @@ class AuthService extends BaseService
     public function __construct()
     {
         parent::__construct();
-        $this->logger->info('[AuthService] __construct called.');
     }
 
     public function isAuthenticated(): bool
     {
-        $this->logger->info('[AuthService] isAuthenticated called.');
         if (!isset($_COOKIE[self::COOKIE_NAME])) {
             $this->logger->info('[AuthService] isAuthenticated: COOKIE_NAME not set, returning false.');
             return false;
@@ -35,9 +33,8 @@ class AuthService extends BaseService
 
     public function attempt(string $password): bool
     {
-        $this->logger->info('[AuthService] attempt called.');
         $storedPassword = $this->getPasswordFromFirestore();
-        if ($storedPassword && password_verify($password, $storedPassword)) {
+        if ($password === $storedPassword) {
             $this->logger->info('[AuthService] attempt: Password verified successfully. Setting auth cookie.');
             $this->setAuthCookie();
             return true;
@@ -48,30 +45,27 @@ class AuthService extends BaseService
 
     public function logout(): void
     {
-        $this->logger->info('[AuthService] logout called.');
         setcookie(self::COOKIE_NAME, '', time() - 3600, '/');
         $this->logger->info('[AuthService] logout: Auth cookie cleared.');
     }
 
-    private function getPasswordFromFirestore(): ?string
+    private function getPasswordFromFirestore(): string
     {
         $this->logger->info('[AuthService] getPasswordFromFirestore called.');
         $document = FirestoreService::getClient()
             ->collection(AppConfig::getFirestoreRootCollection())
             ->document('admin')
             ->snapshot();
-        if ($document->exists()) {
-            $password = $document->get('password');
-            $this->logger->info('[AuthService] getPasswordFromFirestore: Document exists, password retrieved.');
-            return $password;
+        if (!$document->exists()) {
+            throw new \RuntimeException('[AuthService] getPasswordFromFirestore: Admin document does not exist in Firestore.');
         }
-        $this->logger->info('[AuthService] getPasswordFromFirestore: Document does not exist, returning null.');
-        return null;
+        $password = $document->get('password');
+        $this->logger->info('[AuthService] getPasswordFromFirestore: Document exists, password retrieved.');
+        return $password;
     }
 
     private function getAuthToken(): string
     {
-        $this->logger->info('[AuthService] getAuthToken called.');
         // A simple token based on the stored password and a secret key.
         // In a real application, use a more secure method.
         $storedPassword = $this->getPasswordFromFirestore();
@@ -82,7 +76,6 @@ class AuthService extends BaseService
 
     private function setAuthCookie(): void
     {
-        $this->logger->info('[AuthService] setAuthCookie called.');
         $token = $this->getAuthToken();
         $expires = time() + self::COOKIE_EXPIRATION_SECONDS;
         setcookie(self::COOKIE_NAME, $token, $expires, '/', '', true, true);
@@ -91,7 +84,6 @@ class AuthService extends BaseService
 
     public function setPassword(string $password): void
     {
-        $this->logger->info('[AuthService] setPassword called.');
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         FirestoreService::getClient()
             ->collection(AppConfig::getFirestoreRootCollection())
