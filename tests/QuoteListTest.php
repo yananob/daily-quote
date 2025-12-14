@@ -8,9 +8,6 @@ use PHPUnit\Framework\TestCase;
 use App\QuoteList;
 use App\Quote;
 
-/**
- * @group integration
- */
 class QuoteListTest extends TestCase
 {
     private $quoteList;
