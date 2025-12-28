@@ -1,4 +1,7 @@
 {
+    "name": "yananob/daily-quote",
+    "description": "A daily quote application using Google Cloud Functions and Firestore",
+    "license": "proprietary",
     "require": {
         "php": "^8.2",
         "monolog/monolog": "^3.5",
