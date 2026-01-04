@@ -26,7 +26,7 @@ jobs:
       wip_provider_name: 'github-provider'
       secrets_project_id: 'nobu5-393106'
       secrets_config: |-
-        FIREBASE_CONFIG
+        FIREBASE_SERVICE_ACCOUNT
         LINE_TOKENS_N_TARGETS
       deploy_http_trigger: true
       deploy_event_trigger: true

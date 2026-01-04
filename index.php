@@ -28,7 +28,7 @@ function initialize(): void
     // }
     // // $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
     // // $dotenv->load();
-    // // $dotenv->required(['FIREBASE_CONFIG', 'LINE_TOKENS_N_TARGETS', 'LINE_DELIVER_TARGET'])->notEmpty();
+    // // $dotenv->required(['FIREBASE_SERVICE_ACCOUNT', 'LINE_TOKENS_N_TARGETS', 'LINE_DELIVER_TARGET'])->notEmpty();
 
     // $_ENV['APP_ENV'] = $environment;
     // // var_dump($_ENV);
