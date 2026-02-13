@@ -27,12 +27,26 @@ class QuoteList
         foreach ($documents as $document) {
             if ($document->exists()) {
                 $data = $document->data();
-                $data['no'] = $document->id();
+                $data['no'] = (int)$document->id();
                 $quotes[] = $data;
             }
         }
 
-        $randomQuote = $quotes[array_rand($quotes)];
+        if (empty($quotes)) {
+            throw new \Exception("登録されている格言がありません。");
+        }
+
+        // 常に同じ順序になるよう 'no' でソート
+        usort($quotes, fn($a, $b) => $a['no'] <=> $b['no']);
+
+        // 日本時間の年月日をシードとして使用する
+        $tz = new \DateTimeZone('Asia/Tokyo');
+        $date = new \DateTime('now', $tz);
+        $seed = (int)$date->format('Ymd');
+        mt_srand($seed);
+
+        $randomIndex = mt_rand(0, count($quotes) - 1);
+        $randomQuote = $quotes[$randomIndex];
 
         return new Quote($randomQuote);
     }
