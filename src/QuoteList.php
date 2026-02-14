@@ -39,10 +39,11 @@ class QuoteList
         // 常に同じ順序になるよう 'no' でソート
         usort($quotes, fn($a, $b) => $a['no'] <=> $b['no']);
 
-        // 日本時間の年月日をシードとして使用する
+        // 日本時間の年月日、時分秒、マイクロ秒をシードとして使用する
         $tz = new \DateTimeZone('Asia/Tokyo');
         $date = new \DateTime('now', $tz);
-        $seed = (int)$date->format('Ymd');
+        $seedString = $date->format('YmdHisu');
+        $seed = crc32($seedString);
         mt_srand($seed);
 
         $randomIndex = mt_rand(0, count($quotes) - 1);
