@@ -14,7 +14,7 @@ class AuthController extends BaseController
 {
     private AuthService $authService;
 
-    public function __construct(AuthService $authService = null)
+    public function __construct(?AuthService $authService = null)
     {
         parent::__construct();
         $this->authService = $authService ?? new AuthService();
