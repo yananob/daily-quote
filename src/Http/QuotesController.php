@@ -15,7 +15,7 @@ class QuotesController extends BaseController
     private const QUOTES_PER_PAGE = 20;
     private QuoteList $quoteList;
 
-    public function __construct(QuoteList $quoteList = null)
+    public function __construct(?QuoteList $quoteList = null)
     {
         parent::__construct();
         $this->quoteList = $quoteList ?? new QuoteList();
