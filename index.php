@@ -103,7 +103,8 @@ function main_event(CloudEventInterface $event): void
         config: $config,
     );
 
-    $quote = (new QuoteList())->getRandomQuote();
+    $quoteList = new QuoteList();
+    $quote = $quoteList->getRandomQuote();
 
     $message = $quote->getFormattedMessage();
     $log->info("Selected quote: {$message}");
@@ -117,6 +118,7 @@ function main_event(CloudEventInterface $event): void
 
     // if ($response->isSucceeded()) {
     $log->info('Message sent successfully!');
+    $quoteList->incrementDeliveredCount((int)$quote->getNo());
     // } else {
     //     $log->error('Failed to send message: ' . $response->getRawBody());
     // }
