@@ -6,6 +6,7 @@ namespace App;
 
 use App\Service\FirestoreService;
 use Google\Cloud\Firestore\CollectionReference;
+use Google\Cloud\Firestore\FieldValue;
 
 class QuoteList
 {
@@ -23,21 +24,26 @@ class QuoteList
     {
         $documents = $this->quotesCollection->documents();
 
-        $quotes = [];
+        $allQuotes = [];
         foreach ($documents as $document) {
             if ($document->exists()) {
                 $data = $document->data();
                 $data['no'] = (int)$document->id();
-                $quotes[] = $data;
+                $data['delivered_count'] = (int)($data['delivered_count'] ?? 0);
+                $allQuotes[] = $data;
             }
         }
 
-        if (empty($quotes)) {
+        if (empty($allQuotes)) {
             throw new \Exception("登録されている格言がありません。");
         }
 
+        // 配信回数が最小のものを抽出
+        $minCount = min(array_column($allQuotes, 'delivered_count'));
+        $candidates = array_filter($allQuotes, fn($q) => $q['delivered_count'] === $minCount);
+
         // 常に同じ順序になるよう 'no' でソート
-        usort($quotes, fn($a, $b) => $a['no'] <=> $b['no']);
+        usort($candidates, fn($a, $b) => $a['no'] <=> $b['no']);
 
         // 日本時間の年月日、時分秒、マイクロ秒をシードとして使用する
         $tz = new \DateTimeZone('Asia/Tokyo');
@@ -46,8 +52,8 @@ class QuoteList
         $seed = crc32($seedString);
         mt_srand($seed);
 
-        $randomIndex = mt_rand(0, count($quotes) - 1);
-        $randomQuote = $quotes[$randomIndex];
+        $randomIndex = mt_rand(0, count($candidates) - 1);
+        $randomQuote = $candidates[$randomIndex];
 
         return new Quote($randomQuote);
     }
@@ -91,6 +97,13 @@ class QuoteList
         return null;
     }
 
+    public function incrementDeliveredCount(int $id): void
+    {
+        $this->quotesCollection->document((string)$id)->update([
+            ['path' => 'delivered_count', 'value' => FieldValue::increment(1)]
+        ]);
+    }
+
     public function update(int $id, array $data): void
     {
         $this->quotesCollection->document((string)$id)->set(
@@ -129,6 +142,7 @@ class QuoteList
             'message' => $data['message'],
             'source' => $data['source'] ?? '',
             'source_link' => $data['source_link'] ?? '',
+            'delivered_count' => 0,
         ]);
     }
 

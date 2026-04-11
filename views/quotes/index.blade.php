@@ -22,6 +22,7 @@
                     <th>No</th>
                     <th>Message</th>
                     <th>Author</th>
+                    <th>配信回数</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -31,6 +32,7 @@
                     <td>{{ $quote->getNo() }}</td>
                     <td>{{ $quote->getMessage() }}</td>
                     <td>{{ $quote->getAuthor() }}</td>
+                    <td>{{ $quote->getDeliveredCount() }}</td>
                     <td>
                         <a href="{{ $basePath }}/quotes/edit/{{ $quote->getNo() }}" class="btn btn-primary btn-sm">Edit</a>
                         @if ($quote->getSourceLink())
