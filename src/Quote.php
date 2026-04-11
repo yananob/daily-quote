@@ -54,4 +54,9 @@ class Quote
     {
         return $this->data['source_link'] ?? '';
     }
+
+    public function getDeliveredCount(): int
+    {
+        return (int)($this->data['delivered_count'] ?? 0);
+    }
 }
