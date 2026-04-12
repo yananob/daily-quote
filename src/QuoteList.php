@@ -28,7 +28,7 @@ class QuoteList
         foreach ($documents as $document) {
             if ($document->exists()) {
                 $data = $document->data();
-                $data['no'] = (int)$document->id();
+                $data['no'] = $document->id();
                 $data['delivered_count'] = (int)($data['delivered_count'] ?? 0);
                 $allQuotes[] = $data;
             }
@@ -43,7 +43,7 @@ class QuoteList
         $candidates = array_filter($allQuotes, fn($q) => $q['delivered_count'] === $minCount);
 
         // 常に同じ順序になるよう 'no' でソート
-        usort($candidates, fn($a, $b) => $a['no'] <=> $b['no']);
+        usort($candidates, fn($a, $b) => (int)$a['no'] <=> (int)$b['no']);
 
         // 日本時間の年月日、時分秒、マイクロ秒をシードとして使用する
         $tz = new \DateTimeZone('Asia/Tokyo');

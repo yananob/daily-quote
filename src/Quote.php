@@ -32,7 +32,7 @@ class Quote
 
     public function getNo(): string
     {
-        return $this->data['no'] ?? '';
+        return (string)($this->data['no'] ?? '');
     }
 
     public function getMessage(): string
