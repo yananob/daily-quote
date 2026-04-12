@@ -1,7 +1,12 @@
 name: Run test
 
 on:
+  push:
+    branches:
+      - test
   pull_request:
+    branches:
+      - test
     types:
       - 'opened'
       - 'synchronize'
