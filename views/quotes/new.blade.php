@@ -16,7 +16,7 @@
             </div>
         @endif
 
-        <form action="{{ $basePath }}/quotes/store" method="POST">
+        <form action="/quotes/store" method="POST">
             <div class="mb-3">
                 <label for="author" class="form-label">Author</label>
                 <input type="text" class="form-control" id="author" name="author" value="{{ $quote['author'] ?? '' }}">
@@ -34,7 +34,7 @@
                 <input type="text" class="form-control" id="source_link" name="source_link" value="{{ $quote['source_link'] ?? '' }}">
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ $basePath }}/" class="btn btn-secondary">Cancel</a>
+            <a href="/" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>
