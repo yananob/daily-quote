@@ -19,6 +19,8 @@
 .vscode/
 
 *.md
+_template/
+
 # deploy related
 deploy*.sh
 gha-creds-*.json
@@ -29,7 +31,6 @@ gha-creds-*.json
 **/tests/
 **/tools/
 **/miscs/
-/_OLD/
 
 # for PHP
 _cf-common/
