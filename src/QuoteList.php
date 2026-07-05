@@ -78,11 +78,6 @@ class QuoteList
         return $quotes;
     }
 
-    public function getTotalCount(): int
-    {
-        $documents = $this->quotesCollection->documents();
-        return iterator_count($documents);
-    }
 
     /**
      * @return array{total_quotes: int, total_delivered: int, average_delivered: float}
