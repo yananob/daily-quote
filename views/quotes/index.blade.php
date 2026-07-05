@@ -40,24 +40,26 @@
                 <tr>
                     <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $quote->getNo() }}</td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-900">
-                        <div class="break-words min-w-[120px] max-w-xs sm:max-w-md">
+                        <div class="break-words min-w-[150px] max-w-xs sm:max-w-md lg:max-w-lg">
                             {{ $quote->getMessage() }}
                         </div>
                     </td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-500">
-                        <div class="break-words max-w-[80px] sm:max-w-none">
+                        <div class="break-words max-w-[100px] sm:max-w-none">
                             {{ $quote->getAuthor() }}
                         </div>
                     </td>
                     <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $quote->getDeliveredCount() }}</td>
-                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-1 sm:space-x-2">
-                        <a href="/quotes/edit/{{ $quote->getNo() }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                        @if ($quote->getSourceLink())
-                            <a href="{{ $quote->getSourceLink() }}" target="_blank" class="text-blue-600 hover:text-blue-900">Link</a>
-                        @endif
-                        <form action="/quotes/delete/{{ $quote->getNo() }}" method="POST" class="inline">
-                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure?')">Delete</button>
-                        </form>
+                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div class="flex flex-col items-end space-y-1">
+                            <a href="/quotes/edit/{{ $quote->getNo() }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                            @if ($quote->getSourceLink())
+                                <a href="{{ $quote->getSourceLink() }}" target="_blank" class="text-blue-600 hover:text-blue-900">Link</a>
+                            @endif
+                            <form action="/quotes/delete/{{ $quote->getNo() }}" method="POST" class="inline">
+                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
