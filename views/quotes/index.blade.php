@@ -30,8 +30,8 @@
                 <tr>
                     <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
-                    <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                    <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">配信回数</th>
+                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">配信数</th>
                     <th class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
@@ -40,12 +40,16 @@
                 <tr>
                     <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $quote->getNo() }}</td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-900">
-                        <div class="max-w-[150px] sm:max-w-md truncate" title="{{ $quote->getMessage() }}">
+                        <div class="break-words min-w-[120px] max-w-xs sm:max-w-md">
                             {{ $quote->getMessage() }}
                         </div>
                     </td>
-                    <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $quote->getAuthor() }}</td>
-                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $quote->getDeliveredCount() }}</td>
+                    <td class="px-3 sm:px-6 py-4 text-sm text-gray-500">
+                        <div class="break-words max-w-[80px] sm:max-w-none">
+                            {{ $quote->getAuthor() }}
+                        </div>
+                    </td>
+                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $quote->getDeliveredCount() }}</td>
                     <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-1 sm:space-x-2">
                         <a href="/quotes/edit/{{ $quote->getNo() }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                         @if ($quote->getSourceLink())
