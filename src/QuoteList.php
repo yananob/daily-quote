@@ -84,6 +84,32 @@ class QuoteList
         return iterator_count($documents);
     }
 
+    /**
+     * @return array{total_quotes: int, total_delivered: int, average_delivered: float}
+     */
+    public function getStatistics(): array
+    {
+        $documents = $this->quotesCollection->documents();
+        $totalQuotes = 0;
+        $totalDelivered = 0;
+
+        foreach ($documents as $document) {
+            if ($document->exists()) {
+                $data = $document->data();
+                $totalQuotes++;
+                $totalDelivered += (int)($data['delivered_count'] ?? 0);
+            }
+        }
+
+        $averageDelivered = $totalQuotes > 0 ? $totalDelivered / $totalQuotes : 0.0;
+
+        return [
+            'total_quotes' => $totalQuotes,
+            'total_delivered' => $totalDelivered,
+            'average_delivered' => (float)$averageDelivered,
+        ];
+    }
+
     public function find(int $id): ?Quote
     {
         $document = $this->quotesCollection->document((string)$id)->snapshot();

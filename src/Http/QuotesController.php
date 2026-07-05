@@ -27,8 +27,8 @@ class QuotesController extends BaseController
 
         $quotes = $this->quoteList->getListInPage($page, self::QUOTES_PER_PAGE);
 
-        $totalQuotes = $this->quoteList->getTotalCount();
-        $lastPage = (int)ceil($totalQuotes / self::QUOTES_PER_PAGE);
+        $statistics = $this->quoteList->getStatistics();
+        $lastPage = (int)ceil($statistics['total_quotes'] / self::QUOTES_PER_PAGE);
 
         $hasNextPage = count($quotes) > self::QUOTES_PER_PAGE;
         if ($hasNextPage) {
@@ -40,6 +40,7 @@ class QuotesController extends BaseController
             'page' => $page,
             'hasNextPage' => $hasNextPage,
             'lastPage' => $lastPage,
+            'statistics' => $statistics,
         ]);
 
         return new Response(200, ['Content-Type' => 'text/html'], $body);

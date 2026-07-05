@@ -1,41 +1,40 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quote Add</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1 class="mt-5 mb-4">Quote Add</h1>
+@extends('layouts.app')
 
-        @if (isset($error))
-            <div class="alert alert-danger" role="alert">
-                {{ $error }}
-            </div>
-        @endif
+@section('content')
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Quote Add</h1>
 
-        <form action="/quotes/store" method="POST">
-            <div class="mb-3">
-                <label for="author" class="form-label">Author</label>
-                <input type="text" class="form-control" id="author" name="author" value="{{ $quote['author'] ?? '' }}">
-            </div>
-            <div class="mb-3">
-                <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="5">{{ $quote['message'] ?? '' }}</textarea>
-            </div>
-            <div class="mb-3">
-                <label for="source" class="form-label">Source</label>
-                <input type="text" class="form-control" id="source" name="source" value="{{ $quote['source'] ?? '' }}">
-            </div>
-            <div class="mb-3">
-                <label for="source_link" class="form-label">Source Link</label>
-                <input type="text" class="form-control" id="source_link" name="source_link" value="{{ $quote['source_link'] ?? '' }}">
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-            <a href="/" class="btn btn-secondary">Cancel</a>
-        </form>
-    </div>
-</body>
-</html>
+    @if (isset($error))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+            <span class="block sm:inline">{{ $error }}</span>
+        </div>
+    @endif
+
+    <form action="/quotes/store" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border border-gray-200">
+        <div class="mb-4">
+            <label for="author" class="block text-gray-700 text-sm font-bold mb-2">Author</label>
+            <input type="text" id="author" name="author" value="{{ $quote['author'] ?? '' }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-4">
+            <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Message</label>
+            <textarea id="message" name="message" rows="5" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">{{ $quote['message'] ?? '' }}</textarea>
+        </div>
+        <div class="mb-4">
+            <label for="source" class="block text-gray-700 text-sm font-bold mb-2">Source</label>
+            <input type="text" id="source" name="source" value="{{ $quote['source'] ?? '' }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-6">
+            <label for="source_link" class="block text-gray-700 text-sm font-bold mb-2">Source Link</label>
+            <input type="text" id="source_link" name="source_link" value="{{ $quote['source_link'] ?? '' }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out">
+                Create
+            </button>
+            <a href="/" class="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+@endsection
