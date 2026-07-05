@@ -25,12 +25,15 @@ class QuoteListTest extends TestCase
         $this->assertInstanceOf(Quote::class, $quote);
     }
 
-    public function test_合計件数を取得できること()
+    public function test_統計情報を取得できること()
     {
         $quoteList = new QuoteList();
-        $count = $quoteList->getTotalCount();
+        $stats = $quoteList->getStatistics();
 
-        $this->assertGreaterThanOrEqual(0, $count);
+        $this->assertArrayHasKey('total_quotes', $stats);
+        $this->assertArrayHasKey('total_delivered', $stats);
+        $this->assertArrayHasKey('average_delivered', $stats);
+        $this->assertGreaterThanOrEqual(0, $stats['total_quotes']);
     }
 
     public function test_ページ指定でリストを取得できること()
