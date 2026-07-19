@@ -96,7 +96,7 @@ jobs:
 
   deploy:
     needs:  [prepare-deploy, test]
-    uses: yananob/cloud-functions-common/.github/workflows/deploy-cloud-functions.yaml@jules-8121143064417047550-695643bc
+    uses: yananob/cloud-functions-common/.github/workflows/deploy-cloud-functions.yaml@main
     with:
       function_name: ${{ needs.prepare-deploy.outputs.function_name }}
       service_account_name: 'cloud-run-functions-deployer'
