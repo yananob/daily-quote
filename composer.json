@@ -6,7 +6,7 @@
         "php": "~8.2.0",
         "monolog/monolog": "^3.5",
         "google/cloud-functions-framework": "^1.4",
-        "google/cloud-firestore": "^1.54",
+        "google/cloud-firestore": "^2.3",
         "linecorp/line-bot-sdk": "^12.3",
         "eftec/bladeone": "^4.19",
         "nesbot/carbon": "^3.13"
