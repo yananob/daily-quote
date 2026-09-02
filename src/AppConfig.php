@@ -20,7 +20,8 @@ class AppConfig
      */
     public static function getEnvironment(): string
     {
-        return getenv('APP_ENV');
+        $env = getenv('APP_ENV');
+        return ($env !== false && $env !== '') ? $env : 'development';
     }
 
     /**
@@ -32,7 +33,7 @@ class AppConfig
     {
         return match (self::getEnvironment()) {
             'production' => 'daily-quotes',
-            'test', => 'daily-quotes-test',
+            'test' => 'daily-quotes-test',
             default => 'daily-quotes-test',
         };
     }
@@ -50,5 +51,4 @@ class AppConfig
             default => 'nobu',
         };
     }
-
 }

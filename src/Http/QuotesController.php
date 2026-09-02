@@ -64,7 +64,7 @@ class QuotesController extends BaseController
 
     public function update(ServerRequestInterface $request, int $id): ResponseInterface
     {
-        $data = $request->getParsedBody();
+        $data = (array)$request->getParsedBody();
 
         if (empty($data['author']) || empty($data['message'])) {
             $quote = $this->quoteList->find($id);
@@ -78,8 +78,8 @@ class QuotesController extends BaseController
         $this->quoteList->update($id, [
             'author' => $data['author'],
             'message' => $data['message'],
-            'source' => $data['source'],
-            'source_link' => $data['source_link'],
+            'source' => $data['source'] ?? '',
+            'source_link' => $data['source_link'] ?? '',
         ]);
 
         return new Response(302, ['Location' => '/']);
@@ -93,7 +93,7 @@ class QuotesController extends BaseController
 
     public function store(ServerRequestInterface $request): ResponseInterface
     {
-        $data = $request->getParsedBody();
+        $data = (array)$request->getParsedBody();
 
         if (empty($data['author']) || empty($data['message'])) {
             $body = $this->blade->run('quotes.new', [
@@ -106,8 +106,8 @@ class QuotesController extends BaseController
         $this->quoteList->create([
             'author' => $data['author'],
             'message' => $data['message'],
-            'source' => $data['source'],
-            'source_link' => $data['source_link'],
+            'source' => $data['source'] ?? '',
+            'source_link' => $data['source_link'] ?? '',
         ]);
 
         return new Response(302, ['Location' => '/']);
