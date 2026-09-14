@@ -14,11 +14,15 @@ class QuoteList
     private CollectionReference $rootCollection;
     private CollectionReference $quotesCollection;
 
-    public function __construct()
+    public function __construct(?CollectionReference $quotesCollection = null)
     {
-        $firestore = FirestoreService::getClient();
-        $this->rootCollection = $firestore->collection(AppConfig::getFirestoreRootCollection());
-        $this->quotesCollection = $this->rootCollection->document('quotes')->collection('quotes');
+        if ($quotesCollection !== null) {
+            $this->quotesCollection = $quotesCollection;
+        } else {
+            $firestore = FirestoreService::getClient();
+            $this->rootCollection = $firestore->collection(AppConfig::getFirestoreRootCollection());
+            $this->quotesCollection = $this->rootCollection->document('quotes')->collection('quotes');
+        }
     }
 
     /**

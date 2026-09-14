@@ -45,7 +45,6 @@ composer install
 
 - `APP_ENV`: 実行環境を指定します (`production`, `test`, `development`)。未指定時のデフォルトは `development` です。
 - `LINE_TOKENS_N_TARGETS`: LINE Messaging APIのチャネルアクセストークンと送信先ターゲットIDをJSON形式で設定します。
-- `FIREBASE_SERVICE_ACCOUNT`: ローカル開発や外部環境等でサービスアカウント認証情報を明示的に渡す場合にJSON形式で指定します。
 
 #### `AppConfig` クラスによる設定管理
 
