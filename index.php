@@ -5,36 +5,23 @@ declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use App\AppConfig;
-use Google\CloudFunctions\FunctionsFramework;
-use Psr\Http\Message\ServerRequestInterface;
+use App\Http\QuotesController;
+use App\QuoteList;
 use CloudEvents\V1\CloudEventInterface;
-// use Dotenv\Dotenv;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+use Google\CloudFunctions\FunctionsFramework;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
+use LINE\Clients\MessagingApi\Api\MessagingApiApi;
+use LINE\Clients\MessagingApi\Configuration;
 use LINE\Clients\MessagingApi\Model\PushMessageRequest;
 use LINE\Clients\MessagingApi\Model\TextMessage;
-use App\QuoteList;
-use App\Http\QuotesController;
-
-function initialize(): void
-{
-    // $environment = $_ENV['APP_ENV'] ?? 'testing';
-
-    // $file_to_load = ['.env'];   // デフォルトは .env
-    // if ($environment !== 'local') {
-    //     array_unshift($file_to_load, ".env.{$environment}");
-    // }
-    // // $dotenv = Dotenv::createImmutable(__DIR__, $file_to_load);
-    // // $dotenv->load();
-    // // $dotenv->required(['FIREBASE_SERVICE_ACCOUNT', 'LINE_TOKENS_N_TARGETS', 'LINE_DELIVER_TARGET'])->notEmpty();
-
-    // $_ENV['APP_ENV'] = $environment;
-    // // var_dump($_ENV);
-}
-initialize();
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 FunctionsFramework::http('main_http', 'main_http');
-function main_http(ServerRequestInterface $request)
+function main_http(ServerRequestInterface $request): ResponseInterface
 {
     $log = new Logger('main_http');
     $log->pushHandler(new StreamHandler('php://stderr'));
@@ -47,7 +34,6 @@ function main_http(ServerRequestInterface $request)
 
     $log->info("{$method} {$path}");
 
-    // Protected routes
     if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $quotesController->edit($request, $id);
@@ -64,7 +50,7 @@ function main_http(ServerRequestInterface $request)
     } elseif ($method === 'GET' && $path === '/') {
         return $quotesController->index($request);
     } else {
-        return new \GuzzleHttp\Psr7\Response(404, [], 'Not Found');
+        return new Response(404, [], 'Not Found');
     }
 }
 
@@ -75,12 +61,24 @@ function main_event(CloudEventInterface $event): void
     $log->pushHandler(new StreamHandler('php://stderr'));
     $log->info('Function triggered with ' . AppConfig::getEnvironment() . ' environment.');
 
-    $client = new \GuzzleHttp\Client();
-    $config = new \LINE\Clients\MessagingApi\Configuration();
+    $rawLineConfig = getenv('LINE_TOKENS_N_TARGETS');
+    if (!$rawLineConfig) {
+        $log->error('LINE_TOKENS_N_TARGETS environment variable is not set.');
+        return;
+    }
+
+    $lineConfig = json_decode($rawLineConfig);
     $lineDeliverTarget = AppConfig::getLineDeliverTarget();
-    $lineConfig = json_decode(getenv('LINE_TOKENS_N_TARGETS'));
+
+    if (!$lineConfig || !isset($lineConfig->tokens->$lineDeliverTarget) || !isset($lineConfig->target_ids->$lineDeliverTarget)) {
+        $log->error("Failed to parse LINE_TOKENS_N_TARGETS or missing target configuration for '{$lineDeliverTarget}'.");
+        return;
+    }
+
+    $client = new Client();
+    $config = new Configuration();
     $config->setAccessToken($lineConfig->tokens->$lineDeliverTarget);
-    $messagingApi = new \LINE\Clients\MessagingApi\Api\MessagingApiApi(
+    $messagingApi = new MessagingApiApi(
         client: $client,
         config: $config,
     );
@@ -88,20 +86,16 @@ function main_event(CloudEventInterface $event): void
     $quoteList = new QuoteList();
     $quote = $quoteList->getRandomQuote();
 
-    $message = $quote->getFormattedMessage();
-    $log->info("Selected quote: {$message}");
+    $messageText = $quote->getFormattedMessage();
+    $log->info("Selected quote: {$messageText}");
 
-    $message = new TextMessage(['text' => $message]);
-    $request = new PushMessageRequest([
+    $textMessage = new TextMessage(['text' => $messageText]);
+    $pushRequest = new PushMessageRequest([
         'to' => $lineConfig->target_ids->$lineDeliverTarget,
-        'messages' => [$message],
+        'messages' => [$textMessage],
     ]);
-    $response = $messagingApi->pushMessage($request);
+    $messagingApi->pushMessage($pushRequest);
 
-    // if ($response->isSucceeded()) {
     $log->info('Message sent successfully!');
     $quoteList->incrementDeliveredCount((int)$quote->getNo());
-    // } else {
-    //     $log->error('Failed to send message: ' . $response->getRawBody());
-    // }
 }
