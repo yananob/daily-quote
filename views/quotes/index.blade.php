@@ -41,8 +41,8 @@
                         <a href="/quotes/show/{{ $quote->getNo() }}" class="text-blue-600 hover:underline font-medium">{{ $quote->getNo() }}</a>
                     </td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-900">
-                        <div class="whitespace-pre-wrap break-words w-full">
-                            {{ $quote->getMessage() }}
+                        <div class="bg-gray-50 border border-gray-200 rounded-md p-3 text-xs sm:text-sm font-mono whitespace-pre-wrap break-words min-w-[280px] sm:min-w-[400px]">
+                            {{ $quote->getFormattedMessage() }}
                         </div>
                     </td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-500">
