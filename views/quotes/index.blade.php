@@ -31,35 +31,27 @@
                     <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
                     <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">配信数</th>
                     <th class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($quotes as $quote)
                 <tr>
-                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $quote->getNo() }}</td>
+                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <a href="/quotes/show/{{ $quote->getNo() }}" class="text-blue-600 hover:underline font-medium">{{ $quote->getNo() }}</a>
+                    </td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-900">
-                        <div class="break-words min-w-[150px] max-w-xs sm:max-w-md lg:max-w-lg">
+                        <div class="whitespace-pre-wrap break-words w-full">
                             {{ $quote->getMessage() }}
                         </div>
                     </td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-500">
-                        <div class="break-words max-w-[100px] sm:max-w-none">
+                        <div class="break-words min-w-[80px] max-w-[150px] sm:max-w-none">
                             {{ $quote->getAuthor() }}
                         </div>
                     </td>
-                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $quote->getDeliveredCount() }}</td>
                     <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div class="flex flex-col items-end space-y-1">
-                            <a href="/quotes/edit/{{ $quote->getNo() }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                            @if ($quote->getSourceLink())
-                                <a href="{{ $quote->getSourceLink() }}" target="_blank" class="text-blue-600 hover:text-blue-900">Link</a>
-                            @endif
-                            <form action="/quotes/delete/{{ $quote->getNo() }}" method="POST" class="inline">
-                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </div>
+                        <a href="/quotes/show/{{ $quote->getNo() }}" class="text-indigo-600 hover:text-indigo-900">Detail</a>
                     </td>
                 </tr>
                 @endforeach

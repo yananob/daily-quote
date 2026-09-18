@@ -34,7 +34,10 @@ function main_http(ServerRequestInterface $request): ResponseInterface
 
     $log->info("{$method} {$path}");
 
-    if ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
+    if ($method === 'GET' && preg_match('#^/quotes/show/(\d+)$#', $path, $matches)) {
+        $id = (int)$matches[1];
+        return $quotesController->show($request, $id);
+    } elseif ($method === 'GET' && preg_match('#^/quotes/edit/(\d+)$#', $path, $matches)) {
         $id = (int)$matches[1];
         return $quotesController->edit($request, $id);
     } elseif ($method === 'POST' && preg_match('#^/quotes/update/(\d+)$#', $path, $matches)) {
