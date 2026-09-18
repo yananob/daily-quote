@@ -47,6 +47,21 @@ class QuotesController extends BaseController
         return new Response(200, ['Content-Type' => 'text/html'], $body);
     }
 
+    public function show(ServerRequestInterface $request, int $id): ResponseInterface
+    {
+        $quote = $this->quoteList->find($id);
+
+        if (!$quote) {
+            return new Response(404, [], 'Not Found');
+        }
+
+        $body = $this->blade->run('quotes.show', [
+            'quote' => $quote,
+        ]);
+
+        return new Response(200, ['Content-Type' => 'text/html'], $body);
+    }
+
     public function edit(ServerRequestInterface $request, int $id): ResponseInterface
     {
         $quote = $this->quoteList->find($id);
