@@ -30,28 +30,18 @@
                 <tr>
                     <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
-                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                    <th class="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($quotes as $quote)
-                <tr>
-                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <a href="/quotes/show/{{ $quote->getNo() }}" class="text-blue-600 hover:underline font-medium">{{ $quote->getNo() }}</a>
+                <tr onclick="location.href='/quotes/show/{{ $quote->getNo() }}'" class="cursor-pointer hover:bg-gray-50 transition">
+                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                        {{ $quote->getNo() }}
                     </td>
                     <td class="px-3 sm:px-6 py-4 text-sm text-gray-900">
                         <div class="bg-gray-50 border border-gray-200 rounded-md p-3 text-xs sm:text-sm font-mono whitespace-pre-wrap break-words min-w-[280px] sm:min-w-[400px]">
                             {{ $quote->getFormattedMessage() }}
                         </div>
-                    </td>
-                    <td class="px-3 sm:px-6 py-4 text-sm text-gray-500">
-                        <div class="break-words min-w-[80px] max-w-[150px] sm:max-w-none">
-                            {{ $quote->getAuthor() }}
-                        </div>
-                    </td>
-                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/quotes/show/{{ $quote->getNo() }}" class="text-indigo-600 hover:text-indigo-900">Detail</a>
                     </td>
                 </tr>
                 @endforeach
