@@ -34,6 +34,46 @@ class QuotesControllerTest extends TestCase
         return $controller;
     }
 
+    public function test_詳細画面が正しく表示されること(): void
+    {
+        $quote = new Quote(['no' => 1, 'author' => 'Author', 'message' => 'Message']);
+
+        $quoteListMock = $this->createMock(QuoteList::class);
+        $quoteListMock->expects($this->once())
+            ->method('find')
+            ->with(1)
+            ->willReturn($quote);
+
+        $this->bladeMock->expects($this->once())
+            ->method('run')
+            ->with('quotes.show', ['quote' => $quote]);
+
+        $controller = $this->createControllerWithMock($quoteListMock);
+
+        $request = new ServerRequest('GET', '/quotes/show/1');
+
+        $response = $controller->show($request, 1);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function test_存在しない格言の詳細画面で404が返ること(): void
+    {
+        $quoteListMock = $this->createMock(QuoteList::class);
+        $quoteListMock->expects($this->once())
+            ->method('find')
+            ->with(999)
+            ->willReturn(null);
+
+        $controller = $this->createControllerWithMock($quoteListMock);
+
+        $request = new ServerRequest('GET', '/quotes/show/999');
+
+        $response = $controller->show($request, 999);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
     public function testEdit()
     {
         $quote = new Quote(['no' => 1, 'author' => 'Author', 'message' => 'Message']);
