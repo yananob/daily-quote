@@ -34,7 +34,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($quotes as $quote)
-                <tr onclick="location.href='/quotes/show/{{ $quote->getNo() }}'" class="cursor-pointer hover:bg-gray-50 transition">
+                <tr onclick="location.href='/quotes/edit/{{ $quote->getNo() }}?page={{ $page }}'" class="cursor-pointer hover:bg-gray-50 transition">
                     <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
                         {{ $quote->getNo() }}
                     </td>
