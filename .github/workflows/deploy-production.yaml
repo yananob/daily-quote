@@ -10,7 +10,7 @@ concurrency:
   group: daily-quote-deploy-production
 
 permissions:
-  contents: 'read'
+  contents: 'write'
   id-token: 'write'
 
 jobs:
