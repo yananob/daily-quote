@@ -61,41 +61,51 @@ function main_event(CloudEventInterface $event): void
     $log->pushHandler(new StreamHandler('php://stderr'));
     $log->info('Function triggered with ' . AppConfig::getEnvironment() . ' environment.');
 
-    $rawLineConfig = getenv('LINE_TOKENS_N_TARGETS');
-    if (!$rawLineConfig) {
-        $log->error('LINE_TOKENS_N_TARGETS environment variable is not set.');
-        return;
+    try {
+        $rawLineConfig = getenv('LINE_TOKENS_N_TARGETS');
+        if (!$rawLineConfig) {
+            $log->error('LINE_TOKENS_N_TARGETS environment variable is not set.');
+            return;
+        }
+
+        $lineConfig = json_decode($rawLineConfig);
+        $lineDeliverTarget = AppConfig::getLineDeliverTarget();
+
+        if (
+            !($lineConfig instanceof \stdClass) ||
+            !isset($lineConfig->tokens) || !($lineConfig->tokens instanceof \stdClass) ||
+            !isset($lineConfig->target_ids) || !($lineConfig->target_ids instanceof \stdClass) ||
+            !isset($lineConfig->tokens->$lineDeliverTarget) ||
+            !isset($lineConfig->target_ids->$lineDeliverTarget)
+        ) {
+            $log->error("Failed to parse LINE_TOKENS_N_TARGETS or missing target configuration for '{$lineDeliverTarget}'.");
+            return;
+        }
+
+        $client = new Client();
+        $config = new Configuration();
+        $config->setAccessToken((string)$lineConfig->tokens->$lineDeliverTarget);
+        $messagingApi = new MessagingApiApi(
+            client: $client,
+            config: $config,
+        );
+
+        $quoteList = new QuoteList();
+        $quote = $quoteList->getRandomQuote();
+
+        $messageText = $quote->getFormattedMessage();
+        $log->info("Selected quote: {$messageText}");
+
+        $textMessage = new TextMessage(['text' => $messageText]);
+        $pushRequest = new PushMessageRequest([
+            'to' => (string)$lineConfig->target_ids->$lineDeliverTarget,
+            'messages' => [$textMessage],
+        ]);
+        $messagingApi->pushMessage($pushRequest);
+
+        $log->info('Message sent successfully!');
+        $quoteList->incrementDeliveredCount((int)$quote->getNo());
+    } catch (\Throwable $e) {
+        $log->error('Failed to process main_event: ' . $e->getMessage(), ['exception' => $e]);
     }
-
-    $lineConfig = json_decode($rawLineConfig);
-    $lineDeliverTarget = AppConfig::getLineDeliverTarget();
-
-    if (!$lineConfig || !isset($lineConfig->tokens->$lineDeliverTarget) || !isset($lineConfig->target_ids->$lineDeliverTarget)) {
-        $log->error("Failed to parse LINE_TOKENS_N_TARGETS or missing target configuration for '{$lineDeliverTarget}'.");
-        return;
-    }
-
-    $client = new Client();
-    $config = new Configuration();
-    $config->setAccessToken($lineConfig->tokens->$lineDeliverTarget);
-    $messagingApi = new MessagingApiApi(
-        client: $client,
-        config: $config,
-    );
-
-    $quoteList = new QuoteList();
-    $quote = $quoteList->getRandomQuote();
-
-    $messageText = $quote->getFormattedMessage();
-    $log->info("Selected quote: {$messageText}");
-
-    $textMessage = new TextMessage(['text' => $messageText]);
-    $pushRequest = new PushMessageRequest([
-        'to' => $lineConfig->target_ids->$lineDeliverTarget,
-        'messages' => [$textMessage],
-    ]);
-    $messagingApi->pushMessage($pushRequest);
-
-    $log->info('Message sent successfully!');
-    $quoteList->incrementDeliveredCount((int)$quote->getNo());
 }
