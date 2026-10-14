@@ -20,10 +20,22 @@ class QuotesController extends BaseController
         $this->quoteList = $quoteList ?? new QuoteList();
     }
 
-    public function index(ServerRequestInterface $request): ResponseInterface
+    /**
+     * リクエストからページ番号を取得します（最小値は1）。
+     *
+     * @param ServerRequestInterface $request
+     * @return int
+     */
+    private function getPageFromRequest(ServerRequestInterface $request): int
     {
         $queryParams = $request->getQueryParams();
         $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+        return max(1, $page);
+    }
+
+    public function index(ServerRequestInterface $request): ResponseInterface
+    {
+        $page = $this->getPageFromRequest($request);
 
         $quotes = $this->quoteList->getListInPage($page, self::QUOTES_PER_PAGE);
 
@@ -49,8 +61,7 @@ class QuotesController extends BaseController
 
     public function edit(ServerRequestInterface $request, int $id): ResponseInterface
     {
-        $queryParams = $request->getQueryParams();
-        $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+        $page = $this->getPageFromRequest($request);
 
         $quote = $this->quoteList->find($id);
 
@@ -68,12 +79,15 @@ class QuotesController extends BaseController
 
     public function update(ServerRequestInterface $request, int $id): ResponseInterface
     {
-        $queryParams = $request->getQueryParams();
-        $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+        $page = $this->getPageFromRequest($request);
 
         $data = (array)$request->getParsedBody();
+        $author = trim((string)($data['author'] ?? ''));
+        $message = trim((string)($data['message'] ?? ''));
+        $source = trim((string)($data['source'] ?? ''));
+        $sourceLink = trim((string)($data['source_link'] ?? ''));
 
-        if (empty($data['author']) || empty($data['message'])) {
+        if ($author === '' || $message === '') {
             $quote = $this->quoteList->find($id);
             $body = $this->blade->run('quotes.edit', [
                 'quote' => $quote,
@@ -84,10 +98,10 @@ class QuotesController extends BaseController
         }
 
         $this->quoteList->update($id, [
-            'author' => $data['author'],
-            'message' => $data['message'],
-            'source' => $data['source'] ?? '',
-            'source_link' => $data['source_link'] ?? '',
+            'author' => $author,
+            'message' => $message,
+            'source' => $source,
+            'source_link' => $sourceLink,
         ]);
 
         return new Response(302, ['Location' => '/?page=' . $page]);
@@ -102,8 +116,12 @@ class QuotesController extends BaseController
     public function store(ServerRequestInterface $request): ResponseInterface
     {
         $data = (array)$request->getParsedBody();
+        $author = trim((string)($data['author'] ?? ''));
+        $message = trim((string)($data['message'] ?? ''));
+        $source = trim((string)($data['source'] ?? ''));
+        $sourceLink = trim((string)($data['source_link'] ?? ''));
 
-        if (empty($data['author']) || empty($data['message'])) {
+        if ($author === '' || $message === '') {
             $body = $this->blade->run('quotes.new', [
                 'error' => 'Author and message cannot be empty.',
                 'quote' => $data,
@@ -112,10 +130,10 @@ class QuotesController extends BaseController
         }
 
         $this->quoteList->create([
-            'author' => $data['author'],
-            'message' => $data['message'],
-            'source' => $data['source'] ?? '',
-            'source_link' => $data['source_link'] ?? '',
+            'author' => $author,
+            'message' => $message,
+            'source' => $source,
+            'source_link' => $sourceLink,
         ]);
 
         return new Response(302, ['Location' => '/']);
@@ -123,8 +141,7 @@ class QuotesController extends BaseController
 
     public function delete(ServerRequestInterface $request, int $id): ResponseInterface
     {
-        $queryParams = $request->getQueryParams();
-        $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+        $page = $this->getPageFromRequest($request);
 
         $this->quoteList->delete($id);
 
