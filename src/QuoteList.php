@@ -9,11 +9,19 @@ use Carbon\Carbon;
 use Google\Cloud\Firestore\CollectionReference;
 use Google\Cloud\Firestore\FieldValue;
 
+/**
+ * 格言データアクセスおよびビジネスロジックを管理するクラス。
+ */
 class QuoteList
 {
     private CollectionReference $rootCollection;
     private CollectionReference $quotesCollection;
 
+    /**
+     * コンストラクタ。
+     *
+     * @param CollectionReference|null $quotesCollection テスト用等のコレクション参照（nullの場合はFirestoreServiceから取得）
+     */
     public function __construct(?CollectionReference $quotesCollection = null)
     {
         if ($quotesCollection !== null) {
@@ -39,7 +47,7 @@ class QuoteList
         foreach ($documents as $document) {
             if ($document->exists()) {
                 $data = $document->data();
-                $data['no'] = $document->id();
+                $data['no'] = (string)$document->id();
                 $data['delivered_count'] = (int)($data['delivered_count'] ?? 0);
                 $allQuotes[] = $data;
             }
@@ -64,6 +72,7 @@ class QuoteList
 
         $randomIndex = mt_rand(0, count($candidates) - 1);
         $randomQuote = $candidates[$randomIndex];
+        $randomQuote['no'] = (string)$randomQuote['no'];
 
         return new Quote($randomQuote);
     }
@@ -73,7 +82,7 @@ class QuoteList
      *
      * @param int $page ページ番号（1から開始）
      * @param int $limit 1ページあたりの表示件数
-     * @return Quote[]
+     * @return Quote[] 格言オブジェクトの配列
      */
     public function getListInPage(int $page = 1, int $limit = 20): array
     {
@@ -87,7 +96,7 @@ class QuoteList
         foreach ($documents as $document) {
             if ($document->exists()) {
                 $data = $document->data();
-                $data['no'] = $document->id();
+                $data['no'] = (string)$document->id();
                 $quotes[] = new Quote($data);
             }
         }
@@ -98,7 +107,7 @@ class QuoteList
     /**
      * 全格言の統計情報（総件数、総配信数、平均配信数）を取得します。
      *
-     * @return array{totalQuotes: int, totalDelivered: int, averageDelivered: float}
+     * @return array{totalQuotes: int, totalDelivered: int, averageDelivered: float} 統計情報の連想配列
      */
     public function getStatistics(): array
     {
@@ -125,7 +134,7 @@ class QuoteList
     /**
      * 全格言の総数を取得します。
      *
-     * @return int
+     * @return int 格言の総件数
      */
     public function getTotalCount(): int
     {
@@ -136,8 +145,8 @@ class QuoteList
     /**
      * ID（格言番号）から格言を取得します。
      *
-     * @param int $id
-     * @return Quote|null
+     * @param int $id 格言番号
+     * @return Quote|null 格言が存在すればQuoteオブジェクト、存在しなければnull
      */
     public function find(int $id): ?Quote
     {
@@ -145,7 +154,7 @@ class QuoteList
 
         if ($document->exists()) {
             $data = $document->data();
-            $data['no'] = $document->id();
+            $data['no'] = (string)$document->id();
             return new Quote($data);
         }
 
@@ -155,7 +164,7 @@ class QuoteList
     /**
      * 格言の配信回数を1増やします。
      *
-     * @param int $id
+     * @param int $id 格言番号
      * @return void
      */
     public function incrementDeliveredCount(int $id): void
@@ -168,8 +177,8 @@ class QuoteList
     /**
      * 既存の格言情報を更新します。
      *
-     * @param int $id
-     * @param array{author: string, message: string, source?: string, source_link?: string} $data
+     * @param int $id 格言番号
+     * @param array{author: string, message: string, source?: string, source_link?: string} $data 更新データ
      * @return void
      */
     public function update(int $id, array $data): void
@@ -188,7 +197,7 @@ class QuoteList
     /**
      * 新しい格言を登録します。自動で最大No+1が採番されます。
      *
-     * @param array{author: string, message: string, source?: string, source_link?: string} $data
+     * @param array{author: string, message: string, source?: string, source_link?: string} $data 新規登録データ
      * @return void
      */
     public function create(array $data): void
@@ -223,7 +232,7 @@ class QuoteList
     /**
      * 格言を削除します。
      *
-     * @param int $id
+     * @param int $id 格言番号
      * @return void
      */
     public function delete(int $id): void
