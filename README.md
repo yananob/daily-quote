@@ -8,7 +8,7 @@ Firestoreに保存された格言の登録・編集・削除・一覧表示（�
 
 ## アーキテクチャと特徴
 
-- **ランタイム**: PHP 8.2+ (Google Cloud Functions Framework for PHP)
+- **ランタイム**: PHP 8.4+ (Google Cloud Functions Framework for PHP)
 - **データベース**: Google Cloud Firestore (Native Mode)
 - **テンプレートエンジン**: BladeOne (`views/` ディレクトリ内のBladeテンプレートを使用)
 - **日付処理**: `Carbon\Carbon` を使用
