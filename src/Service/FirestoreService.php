@@ -13,7 +13,9 @@ class FirestoreService
     public static function getClient(): FirestoreClient
     {
         if (self::$client === null) {
-            self::$client = new FirestoreClient();
+            self::$client = new FirestoreClient([
+                'transport' => 'rest',
+            ]);
         }
 
         return self::$client;
