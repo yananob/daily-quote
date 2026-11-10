@@ -43,23 +43,31 @@ class QuoteList
     {
         $documents = $this->quotesCollection->documents();
 
-        $allQuotes = [];
+        $minCount = null;
+        /** @var array<int, array<string, mixed>> $candidates */
+        $candidates = [];
+
         foreach ($documents as $document) {
-            if ($document->exists()) {
-                $data = $document->data();
-                $data['no'] = (string)$document->id();
-                $data['delivered_count'] = (int)($data['delivered_count'] ?? 0);
-                $allQuotes[] = $data;
+            if (!$document->exists()) {
+                continue;
+            }
+
+            $data = $document->data();
+            $data['no'] = (string)$document->id();
+            $deliveredCount = (int)($data['delivered_count'] ?? 0);
+            $data['delivered_count'] = $deliveredCount;
+
+            if ($minCount === null || $deliveredCount < $minCount) {
+                $minCount = $deliveredCount;
+                $candidates = [$data];
+            } elseif ($deliveredCount === $minCount) {
+                $candidates[] = $data;
             }
         }
 
-        if (empty($allQuotes)) {
+        if (empty($candidates)) {
             throw new \Exception('登録されている格言がありません。');
         }
-
-        // 配信回数が最小のものを抽出
-        $minCount = min(array_column($allQuotes, 'delivered_count'));
-        $candidates = array_values(array_filter($allQuotes, fn($q) => $q['delivered_count'] === $minCount));
 
         // 常に同じ順序になるよう 'no' でソート
         usort($candidates, fn($a, $b) => (int)$a['no'] <=> (int)$b['no']);

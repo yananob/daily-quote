@@ -23,7 +23,7 @@ class QuoteListTest extends TestCase
         $this->quoteList = new QuoteList($this->quotesCollectionMock);
     }
 
-    public function testGetRandomQuote()
+    public function test_ランダムな格言を1件取得できること()
     {
         $snapshot = $this->createMock(DocumentSnapshot::class);
         $snapshot->method('exists')->willReturn(true);
@@ -43,6 +43,18 @@ class QuoteListTest extends TestCase
         $this->assertInstanceOf(Quote::class, $quote);
         $this->assertEquals('1', $quote->getNo());
         $this->assertEquals('Author 1', $quote->getAuthor());
+    }
+
+    public function test_格言が存在しない場合に例外が発生すること()
+    {
+        $this->quotesCollectionMock->expects($this->once())
+            ->method('documents')
+            ->willReturn([]);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('登録されている格言がありません。');
+
+        $this->quoteList->getRandomQuote();
     }
 
     public function test_合計件数を取得できること()
