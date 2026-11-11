@@ -41,7 +41,7 @@ class QuotesController extends BaseController
 
         $statistics = $this->quoteList->getStatistics();
         $totalQuotes = $statistics['totalQuotes'];
-        $lastPage = (int)ceil($totalQuotes / self::QUOTES_PER_PAGE);
+        $lastPage = max(1, (int)ceil($totalQuotes / self::QUOTES_PER_PAGE));
 
         $hasNextPage = count($quotes) > self::QUOTES_PER_PAGE;
         if ($hasNextPage) {
@@ -81,6 +81,11 @@ class QuotesController extends BaseController
     {
         $page = $this->getPageFromRequest($request);
 
+        $existingQuote = $this->quoteList->find($id);
+        if (!$existingQuote) {
+            return new Response(404, [], 'Not Found');
+        }
+
         $data = (array)$request->getParsedBody();
         $author = trim((string)($data['author'] ?? ''));
         $message = trim((string)($data['message'] ?? ''));
@@ -88,9 +93,17 @@ class QuotesController extends BaseController
         $sourceLink = trim((string)($data['source_link'] ?? ''));
 
         if ($author === '' || $message === '') {
-            $quote = $this->quoteList->find($id);
+            $quoteForEdit = new \App\Quote([
+                'no' => $existingQuote->getNo(),
+                'author' => $author,
+                'message' => $message,
+                'source' => $source,
+                'source_link' => $sourceLink,
+                'delivered_count' => $existingQuote->getDeliveredCount(),
+            ]);
+
             $body = $this->blade->run('quotes.edit', [
-                'quote' => $quote,
+                'quote' => $quoteForEdit,
                 'page' => $page,
                 'error' => 'Author and message cannot be empty.',
             ]);

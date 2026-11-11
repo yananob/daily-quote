@@ -65,10 +65,30 @@ composer install
 
 ---
 
-## 静的解析（PHPStan）の実行
+## テストと静的解析の実行
+
+### 単体テスト（PHPUnit）の実行
+
+```bash
+./vendor/bin/phpunit
+```
+
+またはスクリプトを使用:
+
+```bash
+bash tests/run_tests.sh
+```
+
+### 静的解析（PHPStan）の実行
 
 コードの品質維持のため、PHPStanによる静的解析が導入されています。
 
 ```bash
 ./vendor/bin/phpstan analyze src --level=5 --memory-limit=1G
+```
+
+またはスクリプトを使用:
+
+```bash
+bash tests/run_linter.sh
 ```

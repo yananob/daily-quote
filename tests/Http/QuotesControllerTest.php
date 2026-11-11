@@ -60,7 +60,14 @@ class QuotesControllerTest extends TestCase
 
     public function test_格言更新後に指定されたページ番号へリダイレクトされること(): void
     {
+        $existingQuote = new Quote(['no' => 1, 'author' => 'Old Author', 'message' => 'Old Message']);
+
         $quoteListMock = $this->createMock(QuoteList::class);
+        $quoteListMock->expects($this->once())
+            ->method('find')
+            ->with(1)
+            ->willReturn($existingQuote);
+
         $quoteListMock->expects($this->once())
             ->method('update')
             ->with(1, [
@@ -95,20 +102,53 @@ class QuotesControllerTest extends TestCase
         $this->assertEquals('/?page=2', $response->getHeaderLine('Location'));
     }
 
-    public function test_不正データでの更新時にエラーとページ番号を保持して編集画面を再描画すること(): void
+    public function test_存在しない格言ID更新時に404を返すこと(): void
     {
-        $quote = new Quote(['no' => 1, 'author' => 'Author', 'message' => 'Message']);
+        $quoteListMock = $this->createMock(QuoteList::class);
+        $quoteListMock->expects($this->once())
+            ->method('find')
+            ->with(999)
+            ->willReturn(null);
+
+        $quoteListMock->expects($this->never())
+            ->method('update');
+
+        $controller = $this->createControllerWithMock($quoteListMock);
+
+        $request = new ServerRequest('POST', '/quotes/update/999');
+        $request = $request->withParsedBody([
+            'author' => 'Author',
+            'message' => 'Message'
+        ]);
+
+        $response = $controller->update($request, 999);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function test_不正データでの更新時にエラーと入力値を保持して編集画面を再描画すること(): void
+    {
+        $existingQuote = new Quote(['no' => 1, 'author' => 'Author', 'message' => 'Message', 'delivered_count' => 3]);
 
         $quoteListMock = $this->createMock(QuoteList::class);
         $quoteListMock->expects($this->once())
             ->method('find')
             ->with(1)
-            ->willReturn($quote);
+            ->willReturn($existingQuote);
+
+        $expectedQuote = new Quote([
+            'no' => '1',
+            'author' => '',
+            'message' => 'New Message',
+            'source' => '',
+            'source_link' => '',
+            'delivered_count' => 3,
+        ]);
 
         $this->bladeMock->expects($this->once())
             ->method('run')
             ->with('quotes.edit', [
-                'quote' => $quote,
+                'quote' => $expectedQuote,
                 'page' => 2,
                 'error' => 'Author and message cannot be empty.',
             ]);
